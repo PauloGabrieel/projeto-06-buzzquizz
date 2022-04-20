@@ -1,3 +1,6 @@
+let todosQuizz = [];
+const API = "https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes";
+
 function criarQuizz() {
   document.querySelector('.tela1').classList.add('escondido')
   document.querySelector('.tela3').classList.remove('escondido')
@@ -36,4 +39,30 @@ function prosseguir(elemento) {
   }
 }
 
-function selecionarQuizz() {}
+function pegarQuizz() {
+  const promise = axios.get(API);
+  promise.then(renderizarTodosQuizz)
+  promise.catch(tratarErro);
+}
+function renderizarTodosQuizz(response){
+  const containerQuizz = document.querySelector('.todosQuizz .containerQuizz');
+  todosQuizz = response.data
+  containerQuizz.innerHTML = "";
+  function incluirQuizz(quiz){
+    containerQuizz.innerHTML += `
+      <div class="containerImagem" onclick="selecionarQuizz(this)">
+        <div class="fundoDegrader"></div>
+        <img src=${quiz.image} alt=""/>
+        <p>${quiz.title}</p>
+      </div>
+    
+    `
+  };
+  todosQuizz.map(incluirQuizz);
+};
+
+function tratarErro(erro){
+
+}
+fun
+pegarQuizz()
