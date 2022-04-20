@@ -10,8 +10,50 @@
     <title>BuzzQuizz</title>
   </head>
   <body>
-    <h1>Teste para ver se pegou</h1>
-    <h1>Teste de reset e css e javascript</h1>
+    <div class="tela3 escondido"></div>
+    <div class="tela1">
+      <div class="semQuizz escondido">
+        <h6>Você não criou nenhum quizz ainda :(</h6>
+        <div onclick="criarQuizz()" class="botao">Criar Quizz</div>
+      </div>
+      <div class="seusQuizz">
+        <div class="topoSeusQuizz">
+          <h5>Seus Quizzes</h5>
+          <div onclick="criarQuizz()" class="botaoAdicionarQuizz">+</div>
+        </div>
+        <div class="containerQuizz">
+          <img
+            src="./assets/images/Group 46.png"
+            alt=""
+            style="height: 181px"
+            style="max-width: 340px"
+            style="width: 100%"
+            onclick="removerQuizz(this)"
+          /><img
+            src="./assets/images/Group 47.png"
+            alt=""
+            style="height: 181px"
+            style="max-width: 340px"
+            style="width: 100%"
+            onclick="removerQuizz(this)"
+          /><img
+            src="./assets/images/Group 43.png"
+            alt=""
+            style="height: 181px"
+            style="max-width: 340px"
+            style="width: 100%"
+            onclick="removerQuizz(this)"
+          /><img
+            src="./assets/images/Group 40.png"
+            alt=""
+            style="height: 181px"
+            style="max-width: 340px"
+            style="width: 100%"
+            onclick="removerQuizz(this)"
+          />
+        </div>
+      </div>
+    </div>
     <script src="./assets/javascript/scripts.js"></script>
   </body>
 </html>
