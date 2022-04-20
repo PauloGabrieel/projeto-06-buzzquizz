@@ -27,8 +27,15 @@ h6{
   display: flex;
   flex-wrap: wrap;
 }
+h4{
+  font-size: 23px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 85px;
+}
 .semQuizz{
 max-width: 1051px;
+width: 100%;
 height: 181px;
 display: flex;
 flex-direction: column;
@@ -48,6 +55,7 @@ justify-content: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 .containerQuizz{
   display: flex;
@@ -75,6 +83,109 @@ justify-content: center;
   color: #FFFFFF;
   font-size: 25px;
   font-weight: 700;
+  cursor: pointer;
+}
+.tela3{
+  height: 1024px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.telacomecePeloComeco,.telaCrieSuasPerguntas,.telaDecidaNiveis{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.caixaPerguntasComeco{
+  max-width: 600px;
+  width: 100%;
+  height: 256px;
+  margin-top: 27px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+ input{
+  max-width: 564px;
+  width: 100%;
+  height: 46px;
+  border: 1px solid #D1D1D1;
+  border-radius: 5px;
+  font-size: 19px;
+  font-family: 'Roboto';
+  font-weight: 400;
+}
+ input::-webkit-input-placeholder{
+  color: #BABABA;
+  font-size: 19px;
+  font-weight: 400;
+  font-style: italic;
+  font-family: 'Roboto';
+  padding-left: 23px;
+}
+ input::-moz-placeholder {
+  color: #BABABA;
+  font-size: 19px;
+  font-weight: 400;
+  font-style: italic;
+  font-family: 'Roboto';
+  padding-left: 23px;
+}
+.botaoProsseguir{
+  font-size: 21px;
+  color: #FFF5F4;
+  font-weight: 400;
+  font-family: "Roboto";
+  text-align: center;
+  background-color: #EC362D;
+  border-radius: 15px;
+  max-width: 370px;
+  width: 100%;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 75px;
+  cursor: pointer;
+}
+.tela3 h6{
+  color: #000000;
+  font-weight: 700;
+}
+.perguntas,.niveis{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+.pergunta{
+  max-width: 600px;
+  width: 100%;
+  height: 825px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+  padding-left: 16px;
+}
+.nivel{
+  max-width: 600px;
+  width: 100%;
+  height: 316px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+.nivel h6{
+  max-width: none;
+  padding-left: 35px;
 }
 .escondido{
   display: none;

@@ -19,7 +19,6 @@
       <h1>BuzzQuizz</h1>
     </div>
     <div class="main-container">
-      <div class="tela3 escondido"></div>
       <div class="tela1">
         <div class="semQuizz escondido">
           <h6>Você não criou nenhum quizz ainda :(</h6>
@@ -98,6 +97,58 @@
               style="width: 100%"
               onclick="removerQuizz(this)"
             />
+          </div>
+        </div>
+      </div>
+      <div class="tela3">
+        <div class="telacomecePeloComeco escondido">
+          <h4>Comece pelo começo</h4>
+          <div class="caixaPerguntasComeco">
+            <input type="text" placeholder="Título do seu quizz" />
+            <input type="text" placeholder="URL da imagem do seu quizz  " />
+            <input type="text" placeholder="Quantidade de perguntas do quizz" />
+            <input type="text" placeholder="Quantidade de níveis do quizz" />
+          </div>
+          <div class="botaoProsseguir" onclick="prosseguir(this)">
+            Prosseguir pra criar perguntas
+          </div>
+        </div>
+        <div class="telaCrieSuasPerguntas escondido">
+          <h4>Crie suas perguntas</h4>
+          <ul class="perguntas">
+            <li class="pergunta">
+              <h6>Pergunta 1</h6>
+              <input type="text" placeholder="Texto da pergunta" />
+              <input type="text" placeholder="Cor de fundo da pergunta" />
+              <h6>Resposta correta</h6>
+              <input type="text" placeholder="Resposta correta" />
+              <input type="text" placeholder="URL da imagem" />
+              <h6>Respostas incorretas</h6>
+              <input type="text" placeholder="Resposta incorreta 1" />
+              <input type="text" placeholder="URL da imagem 1" />
+              <input type="text" placeholder="Resposta incorreta 2" />
+              <input type="text" placeholder="URL da imagem 2" />
+              <input type="text" placeholder="Resposta incorreta 3" />
+              <input type="text" placeholder="URL da imagem 3" />
+            </li>
+          </ul>
+          <div class="botaoProsseguir" onclick="prosseguir(this)">
+            Prosseguir pra criar níveis
+          </div>
+        </div>
+        <div class="telaDecidaNiveis escondido">
+          <h4>Agora, decida os níveis</h4>
+          <ul class="niveis">
+            <li class="nivel">
+              <h6>Nível 1</h6>
+              <input type="text" placeholder="Título do nível" />
+              <input type="text" placeholder="% de acerto mínima" />
+              <input type="text" placeholder="URL da imagem do nível" />
+              <input type="text" placeholder="Descrição do nível" />
+            </li>
+          </ul>
+          <div class="botaoProsseguir" onclick="prosseguir(this)">
+            Finalizar Quizz
           </div>
         </div>
       </div>
