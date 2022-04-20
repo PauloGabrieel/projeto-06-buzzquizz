@@ -35,3 +35,5 @@ function prosseguir(elemento) {
     }
   }
 }
+
+function selecionarQuizz() {}
