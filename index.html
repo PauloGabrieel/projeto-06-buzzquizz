@@ -15,7 +15,7 @@
     <div class="header">
       <h1>BuzzQuizz</h1>
     </div>
-    <div class="main-container">
+    <div class="mainContainer">
       <div class="tela3 escondido"></div>
       <div class="tela1">
         <div class="semQuizz escondido">
@@ -65,38 +65,29 @@
             <h5>Todos os Quizzes</h5>
           </div>
           <div class="containerQuizz">
-            <img
-            src="./assets/images/Group 46.png"
-            alt=""
-            style="height: 181px"
-            style="max-width: 340px"
-            style="width: 100%"
-            onclick="removerQuizz(this)"
-                  /><img
-            src="./assets/images/Group 47.png"
-            alt=""
-            alt=""
-            style="height: 181px"
-            style="max-width: 340px"
-            style="width: 100%"
-            onclick="removerQuizz(this)"
-                  /><img
-            src="./assets/images/Group 43.png"
-            alt=""
-            style="height: 181px"
-            style="max-width: 340px"
-            style="width: 100%"
-            onclick="removerQuizz(this)"
-                  /><img
-            src="./assets/images/Group 40.png"
-            alt=""
-            style="height: 181px"
-            style="max-width: 340px"
-            style="width: 100%"
-            onclick="removerQuizz(this)"
-                  />
+            <div class="containerImagem" onclick="funcaoASerImplementada(this)">
+              <div class="fundoDegrader"></div>
+              <img src="./assets/images/seleca0-brasileira.jpg" alt=""onclick="selecionarQuizz(this)"/>
+              <p>Acertes o jogadores que já vestiram a camisa da seleção Brasileira.</p>
+            </div>
+            <div class="containerImagem" onclick="funcaoASerImplementada(this)">
+              <div class="fundoDegrader"></div>
+              <img src="./assets/images/seleca0-brasileira.jpg" alt=""onclick="selecionarQuizz(this)"/>
+              <p>Acertes o jogadores que já vestiram a camisa da seleção Brasileira.</p>
+            </div>
+            <div class="containerImagem" onclick="selecionarQuizz(this)">
+              <div class="fundoDegrader">
+              </div>
+              <img src="./assets/images/seleca0-brasileira.jpg" alt=""onclick="removerQuizz(this)"/>
+              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repudiandae quidem ullam hic commodi quae quod eaque.</p>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="tela2">
+
+        tela
+        
       </div>
     </div>
     <script src="./assets/javascript/scripts.js"></script>

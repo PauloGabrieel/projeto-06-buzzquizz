@@ -16,3 +16,7 @@ function verificarSeusQuizzes() {
     document.querySelector('.semQuizz').classList.toggle('escondido')
   }
 }
+
+function selecionarQuizz(){
+  
+}
