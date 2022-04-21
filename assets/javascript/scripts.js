@@ -64,5 +64,13 @@ function renderizarTodosQuizz(response){
 function tratarErro(erro){
 
 }
-fun
+function selecionarQuizz(elemento){
+  const mainContainer = document.querySelector('.mainContainer').classList.toggle('escondido');
+  console.log(mainContainer);
+  console.log(elemento)
+  
+  
+
+
+}
 pegarQuizz()
