@@ -87,10 +87,23 @@
         <div class="telacomecePeloComeco escondido">
           <h4>Comece pelo começo</h4>
           <div class="caixaPerguntasComeco">
-            <input type="text" placeholder="Título do seu quizz" />
-            <input type="text" placeholder="URL da imagem do seu quizz  " />
-            <input type="text" placeholder="Quantidade de perguntas do quizz" />
-            <input type="text" placeholder="Quantidade de níveis do quizz" />
+            <input
+              type="text"
+              placeholder="Título do seu quizz"
+              minlength="20"
+              maxlength="65"
+            />
+            <input type="url" placeholder="URL da imagem do seu quizz  " />
+            <input
+              type="number"
+              placeholder="Quantidade de perguntas do quizz"
+              min="3"
+            />
+            <input
+              type="number"
+              placeholder="Quantidade de níveis do quizz"
+              min="2"
+            />
           </div>
           <div class="botaoProsseguir" onclick="prosseguir(this)">
             Prosseguir pra criar perguntas
@@ -99,20 +112,31 @@
         <div class="telaCrieSuasPerguntas escondido">
           <h4>Crie suas perguntas</h4>
           <ul class="perguntas">
-            <li class="pergunta">
-              <h6>Pergunta 1</h6>
-              <input type="text" placeholder="Texto da pergunta" />
-              <input type="text" placeholder="Cor de fundo da pergunta" />
-              <h6>Resposta correta</h6>
-              <input type="text" placeholder="Resposta correta" />
-              <input type="text" placeholder="URL da imagem" />
-              <h6>Respostas incorretas</h6>
-              <input type="text" placeholder="Resposta incorreta 1" />
-              <input type="text" placeholder="URL da imagem 1" />
-              <input type="text" placeholder="Resposta incorreta 2" />
-              <input type="text" placeholder="URL da imagem 2" />
-              <input type="text" placeholder="Resposta incorreta 3" />
-              <input type="text" placeholder="URL da imagem 3" />
+            <li>
+              <div class="pergunta">
+                <div class="between">
+                  <h6>Pergunta 1</h6>
+                  <img
+                    src="./assets/images/Vector.png"
+                    style="width: 26px"
+                    style="height: 23px"
+                    onclick="proximaPergunta(this)"
+                    alt=""
+                  />
+                </div>
+                <input type="text" placeholder="Texto da pergunta" />
+                <input type="text" placeholder="Cor de fundo da pergunta" />
+                <h6>Resposta correta</h6>
+                <input type="text" placeholder="Resposta correta" />
+                <input type="url" placeholder="URL da imagem" />
+                <h6>Respostas incorretas</h6>
+                <input type="text" placeholder="Resposta incorreta 1" />
+                <input type="url" placeholder="URL da imagem 1" />
+                <input type="text" placeholder="Resposta incorreta 2" />
+                <input type="url" placeholder="URL da imagem 2" />
+                <input type="text" placeholder="Resposta incorreta 3" />
+                <input type="url" placeholder="URL da imagem 3" />
+              </div>
             </li>
           </ul>
           <div class="botaoProsseguir" onclick="prosseguir(this)">
@@ -122,12 +146,27 @@
         <div class="telaDecidaNiveis escondido">
           <h4>Agora, decida os níveis</h4>
           <ul class="niveis">
-            <li class="nivel">
-              <h6>Nível 1</h6>
-              <input type="text" placeholder="Título do nível" />
-              <input type="text" placeholder="% de acerto mínima" />
-              <input type="text" placeholder="URL da imagem do nível" />
-              <input type="text" placeholder="Descrição do nível" />
+            <li>
+              <div class="nivel">
+                <div class="between" style="width: 100%">
+                  <h6>Nivel 1</h6>
+                  <img
+                    src="./assets/images/Vector.png"
+                    style="width: 26px"
+                    style="height: 23px"
+                    onclick="proximaPergunta(this)"
+                    alt=""
+                  />
+                </div>
+                <input type="text" placeholder="Título do nível" />
+                <input type="text" placeholder="% de acerto mínima" />
+                <input type="url" placeholder="URL da imagem do nível" />
+                <input
+                  class="descricao"
+                  type="text"
+                  placeholder="Descrição do nível"
+                />
+              </div>
             </li>
           </ul>
           <div class="botaoProsseguir" onclick="prosseguir(this)">
