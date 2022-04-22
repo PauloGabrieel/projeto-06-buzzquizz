@@ -1,4 +1,5 @@
 let todosQuizz = []
+let quizzSelecionado = {}
 let seuQuizz = {}
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
 
@@ -73,31 +74,8 @@ function prosseguir(elemento) {
   }
 }
 
-function pegarQuizz() {
-  const promise = axios.get(API)
-  promise.then(renderizarTodosQuizz)
-  promise.catch(tratarErro)
-}
-function renderizarTodosQuizz(response) {
-  const containerQuizz = document.querySelector('.todosQuizz .containerQuizz')
-  todosQuizz = response.data
-  containerQuizz.innerHTML = ''
-  function incluirQuizz(quiz) {
-    containerQuizz.innerHTML += `
-      <div class="containerImagem" onclick="selecionarQuizz(this)">
-        <div class="fundoDegrader"></div>
-        <img src=${quiz.image} alt=""/>
-        <p>${quiz.title}</p>
-      </div>
-    
-    `
-  }
-  todosQuizz.map(incluirQuizz)
-}
 
-function tratarErro(erro) {}
-fun
-pegarQuizz()
+
 
 function verificarPerguntas(elemento) {
   let perguntas = []
@@ -233,13 +211,111 @@ function renderizarNiveis(num) {
     `
   }
 }
-function selecionarQuizz(elemento){
-  const mainContainer = document.querySelector('.mainContainer').classList.toggle('escondido');
-  console.log(mainContainer);
-  console.log(elemento)
-  
-  
 
+function pegarQuizz() {
+  const promise = axios.get(API)
+  promise.then(carregarTodosQuizz)
+  promise.catch(tratarErro)
+}
+function carregarTodosQuizz(response) {
+  todosQuizz = response.data;
+  renderizarTodosQuizzes();
+}
+function renderizarTodosQuizzes(){
+  const containerQuizz = document.querySelector('.todosQuizz .containerQuizz');
+  containerQuizz.innerHTML = ''
+  for(let i = 0; i< todosQuizz.length; i++){  
+
+    containerQuizz.innerHTML += `
+      <div class="containerImagem" onclick="selecionarQuizz(this)">
+        <div class="fundoDegrader"></div>
+        <img data-id="${todosQuizz[i].id}" src=${todosQuizz[i].image} alt=""/>
+        <p>${todosQuizz[i].title}</p>
+      </div>
+    
+    `
+  }
+  
+  
+}
+function tratarErro(erro) {
 
 }
+
+function selecionarQuizz(elemento){
+  const mainContainer = document.querySelector('.mainContainer').classList.toggle('escondido');
+  const quizzTitle = document.querySelector('.quizztitle').classList.toggle('escondido');
+  const tela2 = document.querySelector('.tela2').classList.toggle('escondido');
+  const id = elemento.querySelector("img")
+  const dataId = id.getAttribute("data-id")
+  const promise = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`);
+  
+  
+  promise.then(function(response){
+    quizzSelecionado = response.data;
+    renderizarQuizzSelecionado(quizzSelecionado);
+
+  })
+  promise.catch(erroSelecionarQuizz);
+}
+
+
+
+function renderizarQuizzSelecionado(quizzSelecionado){
+  const quizzTitle = document.querySelector(".quizztitle");
+  const title = document.querySelector(".quizztitle p");
+  const tela2 = document.querySelector('.tela2');
+  const perguntasDosQuizz = document.querySelector(".perguntasDoQuizz")
+  const perguntas = quizzSelecionado.questions
+  
+  quizzTitle.style.backgroundImage = `url(${quizzSelecionado.image})`
+  title.innerHTML = `${quizzSelecionado.title}`
+  
+  
+  for( let i = 0; i < perguntas.length; i++ ){
+    const respostas = perguntas[i].answers;
+    
+    respostas.sort(embaralharRespostas)
+    
+    tela2.innerHTML += `
+      <div class="perguntasDoQuizz">
+        <div class="perguntaDoQuizz" style="background-color:${perguntas[i].color}">
+          <p>${perguntas[i].title}</p>
+        </div>
+        <div class="opcoesDeRespostas">
+            
+        </div>   
+      </div>
+    
+    `
+    const opcoesDeRespostas = document.querySelectorAll(".opcoesDeRespostas")
+    for(let z = 0; z < respostas.length; z ++){
+      opcoesDeRespostas[i].innerHTML +=`
+      <div class="opcao" onclick="respostaEscolhida(this)">
+        <img src=${respostas[z].image} alt="">
+        <p>${respostas[z].text}</p>
+      </div>
+      
+      `
+
+    }
+  }
+ 
+}
+function erroSelecionarQuizz(error){
+  console.log(erro.response)
+}
+  
+function embaralharRespostas(){
+  return Math.random() - 0.5;
+}
+
+function respostaEscolhida(elemento){
+  
+  
+  // for(let i = 0; i < perguntas.length; i++){
+  //   if()
+  // }
+}
+
 pegarQuizz()
