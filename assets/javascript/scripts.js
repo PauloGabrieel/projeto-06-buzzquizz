@@ -21,25 +21,18 @@ function verificarSeusQuizzes() {
   if (tamanho === 0) {
     document.querySelector('.seusQuizz').classList.toggle('escondido')
     document.querySelector('.semQuizz').classList.toggle('escondido')
-    return
-  } else if (tamanho === 1) {
-    document.querySelector('.seusQuizz').classList.remove('escondido')
-    document.querySelector('.semQuizz').classList.add('escondido')
   }
 }
 let quantidadePerguntas = 0
 let quantidadeNivel = 0
 function prosseguir(elemento) {
-  const botoes = document.querySelectorAll('.botaoProsseguir')
-  const inputRespostas = botoes[1].parentNode.querySelectorAll('input')
-  const inputNiveis = botoes[2].parentNode.querySelectorAll('input')
-  if (elemento === botoes[0]) {
+    const botoes = document.querySelectorAll('.botaoProsseguir')
     const titulo = elemento.parentNode.querySelectorAll('input')[0].value
     const url = elemento.parentNode.querySelectorAll('input')[1].value
     quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2].value
     quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3].value
-    seuQuizz.title = titulo
-    seuQuizz.image = url
+  seuQuizz.title = titulo
+  seuQuizz.image = url
     if (titulo.length < 20 || titulo.length > 65) {
       alert('preencha os dados corretamente')
       return
@@ -184,43 +177,20 @@ function verificarPerguntas(elemento) {
         }
       }
       if (j === 2 || j === 3) {
-        if (input[j + i * 10].value.trim() === '') {
+        if (
+          elemento.parentNode
+            .querySelectorAll('input')
+            [j + i * 10].value.trim() === ''
+        ) {
           alert('preencha os dados corretamente')
           return true
         }
       }
-      if (
-        input[4 + i * 10].value.trim() === '' &&
-        input[5 + i * 10].value.trim() === '' &&
-        input[6 + i * 10].value.trim() === '' &&
-        input[7 + i * 10].value.trim() === '' &&
-        input[8 + i * 10].value.trim() === '' &&
-        input[9 + i * 10].value.trim() === ''
-      ) {
-        alert('preencha os dados corretamente')
-        return true
-      }
-      if (j === 4 || j === 6 || j === 8) {
-        if (
-          elemento.parentNode
-            .querySelectorAll('input')
-            [j + i * 10].value.trim() === '' &&
-          elemento.parentNode
-            .querySelectorAll('input')
-            [j + 1 + i * 10].value.trim() === ''
-        ) {
-          perguntasErradasVazias++
-        }
-      }
     }
-  }
-  if (perguntasErradasVazias > 2 * quantidadePerguntas) {
-    alert('preencha os dados corretamente')
-    console.log(perguntasErradasVazias)
-    return true
   }
 }
 function renderizarPerguntas(num) {
+  console.log('entrou no renderizar nivel')
   let local = document.querySelector('.perguntas')
   local.innerHTML = ''
   for (let i = 1; i <= num; i++) {
