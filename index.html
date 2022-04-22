@@ -20,47 +20,16 @@
     </div>
     <div class="mainContainer">
       <div class="tela1">
-        <div class="semQuizz escondido">
+        <div class="semQuizz">
           <h6>Você não criou nenhum quizz ainda :(</h6>
           <div onclick="criarQuizz()" class="botao">Criar Quizz</div>
         </div>
-        <div class="seusQuizz">
+        <div class="seusQuizz escondido">
           <div class="topoSeusQuizz">
             <h5>Seus Quizzes</h5>
             <div onclick="criarQuizz()" class="botaoAdicionarQuizz">+</div>
           </div>
-          <div class="containerQuizz">
-            <img
-              src="./assets/images/Group 46.png"
-              alt=""
-              style="height: 181px"
-              style="max-width: 340px"
-              style="width: 100%"
-              onclick="removerQuizz(this)"
-            /><img
-              src="./assets/images/Group 47.png"
-              alt=""
-              alt=""
-              style="height: 181px"
-              style="max-width: 340px"
-              style="width: 100%"
-              onclick="removerQuizz(this)"
-            /><img
-              src="./assets/images/Group 43.png"
-              alt=""
-              style="height: 181px"
-              style="max-width: 340px"
-              style="width: 100%"
-              onclick="removerQuizz(this)"
-            /><img
-              src="./assets/images/Group 40.png"
-              alt=""
-              style="height: 181px"
-              style="max-width: 340px"
-              style="width: 100%"
-              onclick="removerQuizz(this)"
-            />
-          </div>
+          <div class="containerQuizz"></div>
         </div>
         <div class="todosQuizz">
           <div class="topoTodosQuizz">
@@ -128,14 +97,14 @@
                 <input type="text" placeholder="Cor de fundo da pergunta" />
                 <h6>Resposta correta</h6>
                 <input type="text" placeholder="Resposta correta" />
-                <input type="url" placeholder="URL da imagem" />
+                <input type="text" placeholder="URL da imagem" />
                 <h6>Respostas incorretas</h6>
                 <input type="text" placeholder="Resposta incorreta 1" />
-                <input type="url" placeholder="URL da imagem 1" />
+                <input type="text" placeholder="URL da imagem 1" />
                 <input type="text" placeholder="Resposta incorreta 2" />
-                <input type="url" placeholder="URL da imagem 2" />
+                <input type="text" placeholder="URL da imagem 2" />
                 <input type="text" placeholder="Resposta incorreta 3" />
-                <input type="url" placeholder="URL da imagem 3" />
+                <input type="text" placeholder="URL da imagem 3" />
               </div>
             </li>
           </ul>
@@ -171,6 +140,16 @@
           </ul>
           <div class="botaoProsseguir" onclick="prosseguir(this)">
             Finalizar Quizz
+          </div>
+        </div>
+        <div class="telaQuizzPronto escondido">
+          <h6>Seu quizz está pronto!</h6>
+          <div class="quizzNovo"></div>
+          <div class="botaoAcessarQuizz" onclick="acessarQuizz()">
+            Acessar Quizz
+          </div>
+          <div class="botaoVoltarHome" onclick="voltarHome()">
+            Voltar pra home
           </div>
         </div>
       </div>

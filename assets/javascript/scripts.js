@@ -1,5 +1,5 @@
 let todosQuizz = []
-let seuQuizz = {}
+let seusQuizzes = []
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
 
 function criarQuizz() {
@@ -15,61 +15,146 @@ function removerQuizz(elemento) {
 function verificarSeusQuizzes() {
   const tamanho = document
     .querySelector('.containerQuizz')
-    .querySelectorAll('img').length
+    .querySelectorAll('.containerImagem').length
   if (tamanho === 0) {
     document.querySelector('.seusQuizz').classList.toggle('escondido')
     document.querySelector('.semQuizz').classList.toggle('escondido')
+    return
+  } else if (tamanho === 1) {
+    document.querySelector('.seusQuizz').classList.remove('escondido')
+    document.querySelector('.semQuizz').classList.add('escondido')
   }
 }
 let quantidadePerguntas = 0
 let quantidadeNivel = 0
+let seuQuizz = {}
 function prosseguir(elemento) {
+  const botoes = document.querySelectorAll('.botaoProsseguir')
+  const inputRespostas = botoes[1].parentNode.querySelectorAll('input')
+  const inputNiveis = botoes[2].parentNode.querySelectorAll('input')
   if (elemento === botoes[0]) {
-    // if (titulo.length < 20 || titulo.length > 65) {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    // if (perguntas < 3) {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    // if (niveis < 2) {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    // if (url.slice(0, 8) !== 'https://') {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    const botoes = document.querySelectorAll('.botaoProsseguir')
     const titulo = elemento.parentNode.querySelectorAll('input')[0].value
     const url = elemento.parentNode.querySelectorAll('input')[1].value
     quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2].value
     quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3].value
+    seuQuizz.title = titulo
+    seuQuizz.image = url
+    if (titulo.length < 20 || titulo.length > 65) {
+      alert('preencha os dados corretamente')
+      return
+    }
+    if (quantidadePerguntas < 3) {
+      alert('preencha os dados corretamente')
+      return
+    }
+    if (quantidadeNivel < 2) {
+      alert('preencha os dados corretamente')
+      return
+    }
+    if (url.slice(0, 8) !== 'https://') {
+      alert('preencha os dados corretamente')
+      return
+    }
+    renderizarPerguntas(quantidadePerguntas)
+    renderizarNiveis(quantidadeNivel)
   }
-  seuQuizz.title = titulo
-  seuQuizz.image = url
-  renderizarPerguntas(quantidadePerguntas)
-  renderizarNiveis(quantidadeNivel)
+  if (elemento === botoes[1]) {
+    if (verificarPerguntas(elemento) === true) {
+      return
+    }
+    let perguntas = []
+    let respostas = []
+    for (let i = 0; i < quantidadePerguntas; i++) {
+      let pergunta = {}
+      let resposta = {}
+      pergunta.title = inputRespostas[0 + 10 * i].value
+      pergunta.color = inputRespostas[1 + 10 * i].value
+      resposta.text = inputRespostas[2 + 10 * i].value
+      resposta.image = inputRespostas[3 + 10 * i].value
+      resposta.isCorrectAnswer = true
+      respostas.push(resposta)
+      resposta = {}
+      resposta.text = inputRespostas[4 + 10 * i].value
+      resposta.image = inputRespostas[5 + 10 * i].value
+      resposta.isCorrectAnswer = false
+      respostas.push(resposta)
+      resposta = {}
+      resposta.text = inputRespostas[6 + 10 * i].value
+      resposta.image = inputRespostas[7 + 10 * i].value
+      resposta.isCorrectAnswer = false
+      respostas.push(resposta)
+      resposta.text = inputRespostas[8 + 10 * i].value
+      resposta.image = inputRespostas[9 + 10 * i].value
+      resposta.isCorrectAnswer = false
+      respostas.push(resposta)
+      resposta = {}
+      pergunta.answers = respostas
+      respostas = []
+      perguntas.push(pergunta)
+    }
+    seuQuizz.questions = perguntas
+  }
+  if (elemento === botoes[2]) {
+    let niveis = []
+    for (let i = 0; i < quantidadeNivel; i++) {
+      let nivel = {}
+      nivel.title = inputNiveis[0 + i * 4].value
+      nivel.image = inputNiveis[1 + i * 4].value
+      nivel.text = inputNiveis[2 + i * 4].value
+      nivel.minValue = inputNiveis[3 + i * 4].value
+      niveis.push(nivel)
+    }
+    seuQuizz.levels = niveis
+  }
+  // if (elemento === botoes[botoes.length - 1]) {
+  //   seusQuizzes.push(seuQuizz)
+  //   renderizarSeusQuizzes()
+  //   document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
+  //   document.querySelector('.tela3').classList.toggle('escondido')
+  //   document.querySelector('.tela1').classList.toggle('escondido')
+  //   document.querySelector('.tela1').scrollIntoView(true)
+  // } else {
+  for (let i = 0; i < botoes.length - 1; i++) {
+    if (elemento === botoes[i]) {
+      botoes[i].parentNode.classList.toggle('escondido')
+      botoes[i + 1].parentNode.classList.toggle('escondido')
+      botoes[i + 1].parentNode.scrollIntoView()
+      return
+    }
+  }
   if (elemento === botoes[botoes.length - 1]) {
-    if (elemento === botoes[1]) {
-      if (verificarPerguntas(elemento) === true) {
-        return
-      }
+    for (let i = 0; i < seuQuizz.questions.length; i++) {
+      seuQuizz.questions[i].answers = seuQuizz.questions[i].answers.filter(
+        function (elemento) {
+          if (elemento.image.trim() === '') {
+            return false
+          }
+          return true
+        }
+      )
     }
-    document.querySelector('.telaDecidaNiveis').classList.toggle('escondido')
-    document.querySelector('.tela3').classList.toggle('escondido')
-    document.querySelector('.tela1').classList.toggle('escondido')
-    document.querySelector('.tela1').scrollIntoView(true)
-  } else {
-    for (let i = 0; i < botoes.length - 1; i++) {
-      if (elemento === botoes[i]) {
-        botoes[i].parentNode.classList.toggle('escondido')
-        botoes[i + 1].parentNode.classList.toggle('escondido')
-        botoes[i + 1].parentNode.scrollIntoView()
-        return
-      }
-    }
+    seusQuizzes.push(seuQuizz)
+    renderizarSeusQuizzes()
+    verificarSeusQuizzes()
+    elemento.parentNode.classList.toggle('escondido')
+    document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
+    let localizar = document.querySelector('.quizzNovo')
+    localizar.innerHTML = `
+      <div class="containerImagem">
+        <div class="fundoDegrader"></div>
+        <img
+        src="${seuQuizz.image}"
+        alt=""
+        />
+        <p>
+          ${seuQuizz.title}
+        </p>
+      </div>
+    `
+  }
+  seuQuizz = {}
+  for (let i = 0; i < 4; i++) {
+    document.querySelectorAll('input')[i].value = ''
   }
 }
 
@@ -100,54 +185,73 @@ fun
 pegarQuizz()
 
 function verificarPerguntas(elemento) {
-  let perguntas = []
-  let tituloPergunta = elemento.parentNode.querySelectorAll('input')[0]
-  let corDeFundoPergunta = elemento.parentNode.querySelectorAll('input')[1]
-  for (let i = 0; i < quantidadePergunta; i++) {
-    for (let j = 0; j < 10 * quantidadePergunta; j++) {
-      let pergunta = {}
+  let perguntasErradasVazias = 0
+  const input = elemento.parentNode.querySelectorAll('input')
+  // let perguntas = []
+  // let tituloPergunta = elemento.parentNode.querySelectorAll('input')[0]
+  // let corDeFundoPergunta = elemento.parentNode.querySelectorAll('input')[1]
+  for (let i = 0; i < quantidadePerguntas; i++) {
+    for (let j = 0; j < 10; j++) {
+      // let pergunta = {}
       if (j === 0) {
-        if (
-          elemento.parentNode.querySelectorAll('input')[0 + i * 10].value
-            .length < 20
-        ) {
+        if (input[0 + i * 10].value.length < 20) {
           alert('preencha os dados corretamente')
           return true
         }
       }
       if (j === 1) {
         if (
-          elemento.parentNode
-            .querySelectorAll('input')
-            [1 + i * 10].value.slice(0, 1) !== '#' ||
-          elemento.parentNode.querySelectorAll('input')[1 + i * 10].value
-            .length !== 7
+          input[1 + i * 10].value.slice(0, 1) !== '#' ||
+          input[1 + i * 10].value.length !== 7
         ) {
           alert('preencha os dados corretamente')
           return true
         }
       }
       if (j === 2 || j === 3) {
-        if (
-          elemento.parentNode
-            .querySelectorAll('input')
-            [j + i * 10].value.trim() === ''
-        ) {
+        if (input[j + i * 10].value.trim() === '') {
           alert('preencha os dados corretamente')
           return true
         }
       }
+      if (
+        input[4 + i * 10].value.trim() === '' &&
+        input[5 + i * 10].value.trim() === '' &&
+        input[6 + i * 10].value.trim() === '' &&
+        input[7 + i * 10].value.trim() === '' &&
+        input[8 + i * 10].value.trim() === '' &&
+        input[9 + i * 10].value.trim() === ''
+      ) {
+        alert('preencha os dados corretamente')
+        return true
+      }
+      if (j === 4 || j === 6 || j === 8) {
+        if (
+          elemento.parentNode
+            .querySelectorAll('input')
+            [j + i * 10].value.trim() === '' &&
+          elemento.parentNode
+            .querySelectorAll('input')
+            [j + 1 + i * 10].value.trim() === ''
+        ) {
+          perguntasErradasVazias++
+        }
+      }
     }
+  }
+  if (perguntasErradasVazias > 2 * quantidadePerguntas) {
+    alert('preencha os dados corretamente')
+    console.log(perguntasErradasVazias)
+    return true
   }
 }
 function renderizarPerguntas(num) {
-  console.log('entrou no renderizar nivel')
   let local = document.querySelector('.perguntas')
   local.innerHTML = ''
   for (let i = 1; i <= num; i++) {
     local.innerHTML += `
-    <li class = "ocultarPergunta">
-      <div class="pergunta">
+    <li>
+      <div class="pergunta ocultarPergunta">
         <div class="between">
           <h6>Pergunta ${i}</h6>
           <img
@@ -177,10 +281,11 @@ function renderizarPerguntas(num) {
 }
 function proximaPergunta(elemento) {
   const pai = elemento.parentNode.parentNode.parentNode.parentNode
-  const li = elemento.parentNode.parentNode.parentNode
+  const pergunta = elemento.parentNode.parentNode
+  const li = pai.querySelectorAll('li')
   if (pai.querySelector('.perguntaSelecionada') === null) {
-    li.classList.toggle('perguntaSelecionada')
-    li.classList.toggle('ocultarPergunta')
+    pergunta.classList.toggle('perguntaSelecionada')
+    pergunta.classList.toggle('ocultarPergunta')
   } else {
     pai
       .querySelector('.perguntaSelecionada')
@@ -188,20 +293,16 @@ function proximaPergunta(elemento) {
     pai
       .querySelector('.perguntaSelecionada')
       .classList.toggle('perguntaSelecionada')
-    li.classList.toggle('perguntaSelecionada')
-    li.classList.toggle('ocultarPergunta')
+    pergunta.classList.toggle('perguntaSelecionada')
+    pergunta.classList.toggle('ocultarPergunta')
   }
-  // const arrayPerguntas = document
-  //   .querySelector('.perguntas')
-  //   .querySelectorAll('li')
-  // for (let i = 0; i < arrayPerguntas; i++) {
-  //   if (li === arrayPerguntas[0]) {
-  //     pai.scrollIntoView()
-  //   }
-  //   if (li === arrayPerguntas[i]) {
-  //     arrayPerguntas[i - 1].scrollIntoView()
-  //   }
-  // }
+  for (let i = 0; i < li.length; i++) {
+    if (elemento.parentNode.parentNode.parentNode === li[0]) {
+      pai.parentNode.querySelector('h4').scrollIntoView({ behavior: 'smooth' })
+    } else if (elemento.parentNode.parentNode.parentNode === li[i]) {
+      li[i - 1].scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 }
 function renderizarNiveis(num) {
   const localizar = document.querySelector('.niveis')
@@ -209,7 +310,7 @@ function renderizarNiveis(num) {
   for (let i = 1; i <= num; i++) {
     localizar.innerHTML += `
     <li>
-      <div class="nivel">
+      <div class="nivel ocultarPergunta">
         <div class="between" style="width: 100%">
           <h6>Nivel ${i}</h6>
           <img
@@ -232,4 +333,28 @@ function renderizarNiveis(num) {
     </li>
     `
   }
+}
+function renderizarSeusQuizzes() {
+  const localizar = document.querySelector('.containerQuizz')
+  localizar.innerHTML = ''
+  for (let i = 0; i < seusQuizzes.length; i++) {
+    localizar.innerHTML += `
+  <div class="containerImagem" onclick="funcaoASerImplementada(this)">
+  <div class="fundoDegrader"></div>
+  <img
+    src="${seusQuizzes[i].image}"
+    alt=""
+    onclick="selecionarQuizz(this)"
+  />
+  <p>
+    ${seusQuizzes[i].title}
+  </p>
+</div>
+  `
+  }
+}
+function voltarHome() {
+  document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
+  document.querySelector('.tela3').classList.toggle('escondido')
+  document.querySelector('.tela1').classList.toggle('escondido')
 }
