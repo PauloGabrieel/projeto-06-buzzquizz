@@ -3,7 +3,7 @@ let quizzSelecionado = {}
 let seuQuizz = {}
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
 pegarQuizzDoNavegador()
-if (seusQuizzes.length !== 0) {
+if (seusQuizz.length !== 0) {
   renderizarSeusQuizzes()
 }
 function criarQuizz() {
@@ -50,7 +50,6 @@ function prosseguir(elemento) {
     const url = elemento.parentNode.querySelectorAll('input')[1].value
     quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2].value
     quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3].value
-<<<<<<< HEAD
     seuQuizz.title = titulo
     seuQuizz.image = url
     if (titulo.length < 20 || titulo.length > 65) {
@@ -138,8 +137,6 @@ function prosseguir(elemento) {
       botoes[i + 1].parentNode.scrollIntoView()
       return
     }
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
   }
   seuQuizz.title = titulo
   seuQuizz.image = url
@@ -164,7 +161,6 @@ function prosseguir(elemento) {
         return
       }
     }
-<<<<<<< HEAD
     seusQuizzes.push(seuQuizz)
     mandarQuizzParaNavegador()
     renderizarSeusQuizzes()
@@ -188,8 +184,6 @@ function prosseguir(elemento) {
   seuQuizz = {}
   for (let i = 0; i < 4; i++) {
     document.querySelectorAll('input')[i].value = ''
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
   }
 }
 
@@ -225,7 +219,6 @@ function verificarPerguntas(elemento) {
         }
       }
       if (j === 2 || j === 3) {
-<<<<<<< HEAD
         if (input[j + i * 10].value.trim() === '') {
           alert('preencha os dados corretamente')
           return true
@@ -251,8 +244,6 @@ function verificarPerguntas(elemento) {
         return true
       }
       if (j === 4 || j === 6 || j === 8) {
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
         if (
           elemento.parentNode
             .querySelectorAll('input')
@@ -399,7 +390,6 @@ function renderizarNiveis(num) {
     `
   }
 }
-<<<<<<< HEAD
 function renderizarSeusQuizzes() {
   console.log(seusQuizzes)
   const localizar = document.querySelector('.containerQuizz')
@@ -426,8 +416,6 @@ function voltarHome() {
   document.querySelector('.tela3').classList.toggle('escondido')
   document.querySelector('.tela1').classList.toggle('escondido')
 }
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
 
 function pegarQuizz() {
   const promise = axios.get(API)
@@ -553,7 +541,6 @@ function respostaEscolhida(elemento,quizzSelecionado){
     
 
 pegarQuizz()
-<<<<<<< HEAD
 function pegarQuizzDoNavegador() {
   const pegarQuizz = localStorage.getItem('seusQuizzes')
   if (pegarQuizz === null) {
@@ -566,7 +553,5 @@ function mandarQuizzParaNavegador() {
   const dadosSerializados = JSON.stringify(seusQuizzes)
   localStorage.setItem('seusQuizzes', `${dadosSerializados}`)
 }
-=======
 
 
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
