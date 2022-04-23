@@ -3,7 +3,10 @@ let seusQuizzes = []
 let quizzSelecionado = {}
 let seuQuizz = {}
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
-
+pegarQuizzDoNavegador()
+if (seusQuizzes.length !== 0) {
+  renderizarSeusQuizzes()
+}
 function criarQuizz() {
   document.querySelector('.tela1').classList.add('escondido')
   document.querySelector('.tela3').classList.remove('escondido')
@@ -60,9 +63,9 @@ function prosseguir(elemento) {
     renderizarNiveis(quantidadeNivel)
   }
   if (elemento === botoes[1]) {
-    if (verificarPerguntas(elemento) === true) {
-      return
-    }
+    // if (verificarPerguntas(elemento) === true) {
+    //   return
+    // }
     let perguntas = []
     let respostas = []
     for (let i = 0; i < quantidadePerguntas; i++) {
@@ -96,6 +99,9 @@ function prosseguir(elemento) {
     seuQuizz.questions = perguntas
   }
   if (elemento === botoes[2]) {
+    if (verificarNiveis() === true) {
+      return
+    }
     let niveis = []
     for (let i = 0; i < quantidadeNivel; i++) {
       let nivel = {}
@@ -135,6 +141,7 @@ function prosseguir(elemento) {
       )
     }
     seusQuizzes.push(seuQuizz)
+    mandarQuizzParaNavegador()
     renderizarSeusQuizzes()
     verificarSeusQuizzes()
     elemento.parentNode.classList.toggle('escondido')
@@ -189,6 +196,14 @@ function verificarPerguntas(elemento) {
           return true
         }
       }
+      if (j === 3 || j === 5 || j === 7 || j === 9) {
+        if (input[j + i * 10].value.slice(0, 8) !== 'https://') {
+          if (input[j + i * 10].value.trim() === '') {
+            return false
+          }
+          return true
+        }
+      }
       if (
         input[4 + i * 10].value.trim() === '' &&
         input[5 + i * 10].value.trim() === '' &&
@@ -217,6 +232,47 @@ function verificarPerguntas(elemento) {
   if (perguntasErradasVazias > 2 * quantidadePerguntas) {
     alert('preencha os dados corretamente')
     console.log(perguntasErradasVazias)
+    return true
+  }
+}
+function verificarNiveis() {
+  const input = document.querySelector('.niveis').querySelectorAll('input')
+  for (let i = 0; i < quantidadeNivel; i++) {
+    for (j = 0; j < 4; j++) {
+      if (j === 0) {
+        if (input[0 + 4 * i].value.length < 10) {
+          alert('Preencha os dados corretamente')
+          return true
+        }
+      }
+      if (j === 1) {
+        if (input[1 + 4 * i].value < 0 || input[1 + 4 * i].value > 100) {
+          alert('Preencha os dados corretamente')
+          return true
+        }
+      }
+      if (j === 2) {
+        if (input[2 + 4 * i].value.slice(0, 8) !== 'https://') {
+          alert('Preencha os dados corretamente')
+          return true
+        }
+      }
+      if (j === 3) {
+        if (input[3 + 4 * i].value.length < 30) {
+          alert('Preencha os dados corretamente')
+          return true
+        }
+      }
+    }
+  }
+  let contador = 0
+  for (let i = 0; i < quantidadeNivel; i++) {
+    if (input[1 + 4 * i].value == 0) {
+      contador++
+    }
+  }
+  if (contador === 0) {
+    alert('Preencha os dados corretamente')
     return true
   }
 }
@@ -310,6 +366,7 @@ function renderizarNiveis(num) {
   }
 }
 function renderizarSeusQuizzes() {
+  console.log(seusQuizzes)
   const localizar = document.querySelector('.containerQuizz')
   localizar.innerHTML = ''
   for (let i = 0; i < seusQuizzes.length; i++) {
@@ -327,6 +384,7 @@ function renderizarSeusQuizzes() {
 </div>
   `
   }
+  verificarSeusQuizzes()
 }
 function voltarHome() {
   document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
@@ -433,3 +491,15 @@ function respostaEscolhida(elemento) {
 }
 
 pegarQuizz()
+function pegarQuizzDoNavegador() {
+  const pegarQuizz = localStorage.getItem('seusQuizzes')
+  if (pegarQuizz === null) {
+    return
+  }
+  const dadosDeserializados = JSON.parse(pegarQuizz)
+  seusQuizzes = dadosDeserializados
+}
+function mandarQuizzParaNavegador() {
+  const dadosSerializados = JSON.stringify(seusQuizzes)
+  localStorage.setItem('seusQuizzes', `${dadosSerializados}`)
+}
