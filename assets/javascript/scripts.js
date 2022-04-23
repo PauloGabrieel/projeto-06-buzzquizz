@@ -1,9 +1,14 @@
 let todosQuizz = []
+let seusQuizzes = []
 let quizzSelecionado = {}
 let seuQuizz = {}
+let acertos = 0
+let jogadas = 0
+let levels = []
+
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
 pegarQuizzDoNavegador()
-if (seusQuizz.length !== 0) {
+if (seusQuizzes.length !== 0) {
   renderizarSeusQuizzes()
 }
 function criarQuizz() {
@@ -299,7 +304,7 @@ function verificarNiveis() {
   }
 }
 function renderizarPerguntas(num) {
-  console.log('entrou no renderizar nivel')
+  
   let local = document.querySelector('.perguntas')
   local.innerHTML = ''
   for (let i = 1; i <= num; i++) {
@@ -392,7 +397,7 @@ function renderizarNiveis(num) {
   }
 }
 function renderizarSeusQuizzes() {
-  console.log(seusQuizzes)
+  
   const localizar = document.querySelector('.containerQuizz')
   localizar.innerHTML = ''
   for (let i = 0; i < seusQuizzes.length; i++) {
@@ -416,6 +421,7 @@ function voltarHome() {
   document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
   document.querySelector('.tela3').classList.toggle('escondido')
   document.querySelector('.tela1').classList.toggle('escondido')
+  window.location.reload()
 }
 
 function pegarQuizz() {
@@ -423,8 +429,12 @@ function pegarQuizz() {
   promise.then(carregarTodosQuizz)
   promise.catch(tratarErro)
 }
+
 function carregarTodosQuizz(response) {
-  todosQuizz = response.data
+  
+  response.data.map(function (elemento) {
+    todosQuizz.push(elemento)
+  })
   renderizarTodosQuizzes(todosQuizz)
 }
 function renderizarTodosQuizzes(todosQuizz) {
@@ -453,37 +463,49 @@ function selecionarQuizz(elemento) {
     .classList.toggle('escondido')
   const tela2 = document.querySelector('.tela2').classList.toggle('escondido')
   const id = elemento.querySelector('img')
-  const dataId = id.getAttribute('data-id')
-  const promise = axios.get(
-    `https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`
-  )
+  // const dataId = id.getAttribute('data-id')
+  // const promise = axios.get(
+  //   `https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`
+  // )
 
-  promise.then(function (response) {
-    quizzSelecionado = response.data
-    renderizarQuizzSelecionado(quizzSelecionado)
+  // promise.then(function (response) {
+  //   quizzSelecionado = response.data
+  //   renderizarQuizzSelecionado(quizzSelecionado)
+  // })
+  // promise.catch(function (erro) {
+  //   console.log(erro.response)
+  // })
+  const dataId = elemento.querySelector('[data-id]').getAttribute('data-id')
+  const elementoSelecionado = todosQuizz.filter(function (elemento) {
+    if (elemento.id == dataId) {
+      return true
+    }
+    return false
   })
-  promise.catch(function (erro) {
-    console.log(erro.response)
-  })
+  
+  renderizarQuizzSelecionado(elementoSelecionado)
 }
 
 function renderizarQuizzSelecionado(quizzSelecionado) {
+  window.scrollTo(0,0)
+  
   const quizzTitle = document.querySelector('.quizztitle')
   const title = document.querySelector('.quizztitle p')
   const tela2 = document.querySelector('.tela2')
   const perguntasDosQuizz = document.querySelector('.perguntasDoQuizz')
-  const perguntas = quizzSelecionado.questions
-
-  quizzTitle.style.backgroundImage = `url(${quizzSelecionado.image})`
-  title.innerHTML = `${quizzSelecionado.title}`
+  const perguntas = quizzSelecionado[0].questions
+  levels = quizzSelecionado[0].levels 
+  
+  quizzTitle.style.backgroundImage = `url(${quizzSelecionado[0].image})`
+  title.innerHTML = `${quizzSelecionado[0].title}`
 
   for (let i = 0; i < perguntas.length; i++) {
     const respostas = perguntas[i].answers
-
+    
     respostas.sort(embaralharRespostas)
-
+   
     tela2.innerHTML += `
-      <div class="perguntasDoQuizz">
+      <div id="${i}"class="perguntasDoQuizz">
         <div class="perguntaDoQuizz" style="background-color:${perguntas[i].color}">
           <p>${perguntas[i].title}</p>
         </div>
@@ -496,7 +518,7 @@ function renderizarQuizzSelecionado(quizzSelecionado) {
     const opcoesDeRespostas = document.querySelectorAll('.opcoesDeRespostas')
     for (let z = 0; z < respostas.length; z++) {
       opcoesDeRespostas[i].innerHTML += `
-      <div class="opcao" data-isCorrect="${respostas[z].isCorrectAnswer}" onclick="respostaEscolhida(this,quizzSelecionado)">
+      <div class="opcao" data-isCorrect="${respostas[z].isCorrectAnswer}" onclick="respostaEscolhida(this,${perguntas.length})">
         <div class=""></div>
         <img src=${respostas[z].image} alt="">
         <p>${respostas[z].text}</p>
@@ -511,20 +533,112 @@ function embaralharRespostas() {
   return Math.random() - 0.5
 }
 
-function respostaEscolhida(elemento, quizzSelecionado) {
+function respostaEscolhida(elemento, qtdPerguntas) {
+  const clicado = elemento.parentNode;
   const opcoesDeRespostas = elemento.parentNode.querySelectorAll('.opcao')
+  
+  if(clicado.classList.contains("clicado")===false){
+      
+      jogadas++
+      if(elemento.getAttribute("data-isCorrect")==="true"){
+        
+        acertos++
+      }
+      
+      opcoesDeRespostas.forEach(opcao => {
+       
+        opcao.querySelector('div').classList.add('naoSelecionado')
+        elemento.querySelector('div').classList.remove('naoSelecionado')
 
-  opcoesDeRespostas.forEach(function (opcao) {
-    opcao.querySelector('div').classList.add('naoSelecionado')
-    elemento.querySelector('div').classList.remove('naoSelecionado')
-    if (opcao.getAttribute('data-isCorrect') === 'true') {
-      opcao.querySelector('p').style.color = 'green'
-      console.log(opcao)
-    } else {
-      opcao.querySelector('p').style.color = 'red'
-    }
-  })
+        if(opcao.getAttribute("data-isCorrect")==="true"){
+         
+          opcao.querySelector('p').style.color = 'green'
+          
+
+        }else{
+          opcao.querySelector('p').style.color = 'red'
+          
+        }
+      })
+  }else{
+    return
+  }
+  
+  clicado.classList.add('clicado')
+  if( jogadas === qtdPerguntas){
+    fimDeJogo(acertos,qtdPerguntas, levels)
+  }
+} 
+  
+function fimDeJogo(acertos, qtdPerguntas, levels){
+  const tela2 = document.querySelector(".tela2")
+  const porcentagem = ((acertos *100)/ qtdPerguntas)
+  
+
+  
+  
+  tela2.innerHTML +=`
+  <div class="resultadoQuizz">
+      <div class="porcentagemAcerto">
+          <p>88% de acerto: Você é praticamente um aluno de Hogwarts!</p>
+      </div>
+      <div class="resultado">
+          <img src="./assets/images/seleca0-brasileira.jpg" alt="">
+          <p>Parabéns Potterhead! Bem-vindx a Hogwarts, aproveite o loop infinito de comida e clique no botão abaixo para usar o vira-tempo e reiniciar este teste.</p>
+      </div>
+      <div class="reiniciarQuizz" onclick="renderizarQuizzSelecionado()">
+          Reiniciar Quizz
+      </div>
+      <div class="voltarHome" onclick="voltarHome()">Voltar pra home</div>
+  </div>
+
+  `
+  let nivelAcerto = levels.map(nivel => nivel.minValue)
+  
+  const p = document.querySelector(".porcentagemAcerto p")
+  p.innerHTML = `<p> ${porcentagem}% de acerto:`
+  
 }
+  
+  
+  
+  // if(quizzSelecionado.length)
+  // console.log(jogadas)
+  // console.log(acertos)
+  
+//   let cliques = 0;
+//   const opcoesDeRespostas = elemento.parentNode.querySelectorAll('.opcao')
+//   let perguntaRespondida = elemento.parentNode;
+
+
+
+//   console.log(elemento.getAttribute("data-iscorrect"))
+//   if(elemento.getAttribute("data-iscorrect")==="true"){
+//     acertos++
+//   }
+  
+//   if(perguntaRespondida.classList.contains("clicou") === false){
+//     opcoesDeRespostas.forEach(function (opcao) {
+//       opcao.querySelector('div').classList.add('naoSelecionado')
+//       elemento.querySelector('div').classList.remove('naoSelecionado')
+      
+//       if (opcao.getAttribute('data-isCorrect') === 'true') {
+//         opcao.querySelector('p').style.color = 'green'
+        
+        
+//       } else {
+//         opcao.querySelector('p').style.color = 'red'
+//       }
+//     })
+//   }else{
+//     return
+//   }
+//   perguntaRespondida.classList.add("clicou")
+//   console.log(acertos)
+
+
+  
+
 
 pegarQuizz()
 function pegarQuizzDoNavegador() {
@@ -539,8 +653,3 @@ function mandarQuizzParaNavegador() {
   const dadosSerializados = JSON.stringify(seusQuizzes)
   localStorage.setItem('seusQuizzes', `${dadosSerializados}`)
 }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> ab3f13875445557bb4e32bbc71d1d5060d04d66c
