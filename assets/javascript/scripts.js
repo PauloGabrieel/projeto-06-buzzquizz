@@ -1,5 +1,4 @@
 let todosQuizz = []
-let seusQuizzes = []
 let quizzSelecionado = {}
 let seuQuizz = {}
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
@@ -20,27 +19,38 @@ function removerQuizz(elemento) {
 function verificarSeusQuizzes() {
   const tamanho = document
     .querySelector('.containerQuizz')
-    .querySelectorAll('.containerImagem').length
+    .querySelectorAll('img').length
   if (tamanho === 0) {
     document.querySelector('.seusQuizz').classList.toggle('escondido')
     document.querySelector('.semQuizz').classList.toggle('escondido')
-    return
-  } else if (tamanho === 1) {
-    document.querySelector('.seusQuizz').classList.remove('escondido')
-    document.querySelector('.semQuizz').classList.add('escondido')
   }
 }
 let quantidadePerguntas = 0
 let quantidadeNivel = 0
 function prosseguir(elemento) {
-  const botoes = document.querySelectorAll('.botaoProsseguir')
-  const inputRespostas = botoes[1].parentNode.querySelectorAll('input')
-  const inputNiveis = botoes[2].parentNode.querySelectorAll('input')
   if (elemento === botoes[0]) {
+    // if (titulo.length < 20 || titulo.length > 65) {
+    //   alert('preencha os dados corretamente')
+    //   return
+    // }
+    // if (perguntas < 3) {
+    //   alert('preencha os dados corretamente')
+    //   return
+    // }
+    // if (niveis < 2) {
+    //   alert('preencha os dados corretamente')
+    //   return
+    // }
+    // if (url.slice(0, 8) !== 'https://') {
+    //   alert('preencha os dados corretamente')
+    //   return
+    // }
+    const botoes = document.querySelectorAll('.botaoProsseguir')
     const titulo = elemento.parentNode.querySelectorAll('input')[0].value
     const url = elemento.parentNode.querySelectorAll('input')[1].value
     quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2].value
     quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3].value
+<<<<<<< HEAD
     seuQuizz.title = titulo
     seuQuizz.image = url
     if (titulo.length < 20 || titulo.length > 65) {
@@ -128,18 +138,33 @@ function prosseguir(elemento) {
       botoes[i + 1].parentNode.scrollIntoView()
       return
     }
+=======
+>>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
   }
+  seuQuizz.title = titulo
+  seuQuizz.image = url
+  renderizarPerguntas(quantidadePerguntas)
+  renderizarNiveis(quantidadeNivel)
   if (elemento === botoes[botoes.length - 1]) {
-    for (let i = 0; i < seuQuizz.questions.length; i++) {
-      seuQuizz.questions[i].answers = seuQuizz.questions[i].answers.filter(
-        function (elemento) {
-          if (elemento.image.trim() === '') {
-            return false
-          }
-          return true
-        }
-      )
+    if (elemento === botoes[1]) {
+      if (verificarPerguntas(elemento) === true) {
+        return
+      }
     }
+    document.querySelector('.telaDecidaNiveis').classList.toggle('escondido')
+    document.querySelector('.tela3').classList.toggle('escondido')
+    document.querySelector('.tela1').classList.toggle('escondido')
+    document.querySelector('.tela1').scrollIntoView(true)
+  } else {
+    for (let i = 0; i < botoes.length - 1; i++) {
+      if (elemento === botoes[i]) {
+        botoes[i].parentNode.classList.toggle('escondido')
+        botoes[i + 1].parentNode.classList.toggle('escondido')
+        botoes[i + 1].parentNode.scrollIntoView()
+        return
+      }
+    }
+<<<<<<< HEAD
     seusQuizzes.push(seuQuizz)
     mandarQuizzParaNavegador()
     renderizarSeusQuizzes()
@@ -163,34 +188,44 @@ function prosseguir(elemento) {
   seuQuizz = {}
   for (let i = 0; i < 4; i++) {
     document.querySelectorAll('input')[i].value = ''
+=======
+>>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
   }
 }
 
+
+
+
 function verificarPerguntas(elemento) {
-  let perguntasErradasVazias = 0
-  const input = elemento.parentNode.querySelectorAll('input')
-  // let perguntas = []
-  // let tituloPergunta = elemento.parentNode.querySelectorAll('input')[0]
-  // let corDeFundoPergunta = elemento.parentNode.querySelectorAll('input')[1]
-  for (let i = 0; i < quantidadePerguntas; i++) {
-    for (let j = 0; j < 10; j++) {
-      // let pergunta = {}
+  let perguntas = []
+  let tituloPergunta = elemento.parentNode.querySelectorAll('input')[0]
+  let corDeFundoPergunta = elemento.parentNode.querySelectorAll('input')[1]
+  for (let i = 0; i < quantidadePergunta; i++) {
+    for (let j = 0; j < 10 * quantidadePergunta; j++) {
+      let pergunta = {}
       if (j === 0) {
-        if (input[0 + i * 10].value.length < 20) {
+        if (
+          elemento.parentNode.querySelectorAll('input')[0 + i * 10].value
+            .length < 20
+        ) {
           alert('preencha os dados corretamente')
           return true
         }
       }
       if (j === 1) {
         if (
-          input[1 + i * 10].value.slice(0, 1) !== '#' ||
-          input[1 + i * 10].value.length !== 7
+          elemento.parentNode
+            .querySelectorAll('input')
+            [1 + i * 10].value.slice(0, 1) !== '#' ||
+          elemento.parentNode.querySelectorAll('input')[1 + i * 10].value
+            .length !== 7
         ) {
           alert('preencha os dados corretamente')
           return true
         }
       }
       if (j === 2 || j === 3) {
+<<<<<<< HEAD
         if (input[j + i * 10].value.trim() === '') {
           alert('preencha os dados corretamente')
           return true
@@ -216,23 +251,18 @@ function verificarPerguntas(elemento) {
         return true
       }
       if (j === 4 || j === 6 || j === 8) {
+=======
+>>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
         if (
           elemento.parentNode
             .querySelectorAll('input')
-            [j + i * 10].value.trim() === '' &&
-          elemento.parentNode
-            .querySelectorAll('input')
-            [j + 1 + i * 10].value.trim() === ''
+            [j + i * 10].value.trim() === ''
         ) {
-          perguntasErradasVazias++
+          alert('preencha os dados corretamente')
+          return true
         }
       }
     }
-  }
-  if (perguntasErradasVazias > 2 * quantidadePerguntas) {
-    alert('preencha os dados corretamente')
-    console.log(perguntasErradasVazias)
-    return true
   }
 }
 function verificarNiveis() {
@@ -277,12 +307,13 @@ function verificarNiveis() {
   }
 }
 function renderizarPerguntas(num) {
+  console.log('entrou no renderizar nivel')
   let local = document.querySelector('.perguntas')
   local.innerHTML = ''
   for (let i = 1; i <= num; i++) {
     local.innerHTML += `
-    <li>
-      <div class="pergunta ocultarPergunta">
+    <li class = "ocultarPergunta">
+      <div class="pergunta">
         <div class="between">
           <h6>Pergunta ${i}</h6>
           <img
@@ -312,11 +343,10 @@ function renderizarPerguntas(num) {
 }
 function proximaPergunta(elemento) {
   const pai = elemento.parentNode.parentNode.parentNode.parentNode
-  const pergunta = elemento.parentNode.parentNode
-  const li = pai.querySelectorAll('li')
+  const li = elemento.parentNode.parentNode.parentNode
   if (pai.querySelector('.perguntaSelecionada') === null) {
-    pergunta.classList.toggle('perguntaSelecionada')
-    pergunta.classList.toggle('ocultarPergunta')
+    li.classList.toggle('perguntaSelecionada')
+    li.classList.toggle('ocultarPergunta')
   } else {
     pai
       .querySelector('.perguntaSelecionada')
@@ -324,16 +354,20 @@ function proximaPergunta(elemento) {
     pai
       .querySelector('.perguntaSelecionada')
       .classList.toggle('perguntaSelecionada')
-    pergunta.classList.toggle('perguntaSelecionada')
-    pergunta.classList.toggle('ocultarPergunta')
+    li.classList.toggle('perguntaSelecionada')
+    li.classList.toggle('ocultarPergunta')
   }
-  for (let i = 0; i < li.length; i++) {
-    if (elemento.parentNode.parentNode.parentNode === li[0]) {
-      pai.parentNode.querySelector('h4').scrollIntoView({ behavior: 'smooth' })
-    } else if (elemento.parentNode.parentNode.parentNode === li[i]) {
-      li[i - 1].scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+  // const arrayPerguntas = document
+  //   .querySelector('.perguntas')
+  //   .querySelectorAll('li')
+  // for (let i = 0; i < arrayPerguntas; i++) {
+  //   if (li === arrayPerguntas[0]) {
+  //     pai.scrollIntoView()
+  //   }
+  //   if (li === arrayPerguntas[i]) {
+  //     arrayPerguntas[i - 1].scrollIntoView()
+  //   }
+  // }
 }
 function renderizarNiveis(num) {
   const localizar = document.querySelector('.niveis')
@@ -341,7 +375,7 @@ function renderizarNiveis(num) {
   for (let i = 1; i <= num; i++) {
     localizar.innerHTML += `
     <li>
-      <div class="nivel ocultarPergunta">
+      <div class="nivel">
         <div class="between" style="width: 100%">
           <h6>Nivel ${i}</h6>
           <img
@@ -365,6 +399,7 @@ function renderizarNiveis(num) {
     `
   }
 }
+<<<<<<< HEAD
 function renderizarSeusQuizzes() {
   console.log(seusQuizzes)
   const localizar = document.querySelector('.containerQuizz')
@@ -391,6 +426,8 @@ function voltarHome() {
   document.querySelector('.tela3').classList.toggle('escondido')
   document.querySelector('.tela1').classList.toggle('escondido')
 }
+=======
+>>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
 
 function pegarQuizz() {
   const promise = axios.get(API)
@@ -398,13 +435,15 @@ function pegarQuizz() {
   promise.catch(tratarErro)
 }
 function carregarTodosQuizz(response) {
-  todosQuizz = response.data
-  renderizarTodosQuizzes()
+  todosQuizz = response.data;
+  renderizarTodosQuizzes(todosQuizz);
 }
-function renderizarTodosQuizzes() {
-  const containerQuizz = document.querySelector('.todosQuizz .containerQuizz')
+function renderizarTodosQuizzes(todosQuizz){
+  const containerQuizz = document.querySelector('.todosQuizz .containerQuizz');
+  
   containerQuizz.innerHTML = ''
-  for (let i = 0; i < todosQuizz.length; i++) {
+  for(let i = 0; i< todosQuizz.length; i++){  
+
     containerQuizz.innerHTML += `
       <div class="containerImagem" onclick="selecionarQuizz(this)">
         <div class="fundoDegrader"></div>
@@ -414,45 +453,54 @@ function renderizarTodosQuizzes() {
     
     `
   }
+  
+  
 }
-function tratarErro(erro) {}
+function tratarErro(erro) {
 
-function selecionarQuizz(elemento) {
-  const mainContainer = document
-    .querySelector('.mainContainer')
-    .classList.toggle('escondido')
-  const quizzTitle = document
-    .querySelector('.quizztitle')
-    .classList.toggle('escondido')
-  const tela2 = document.querySelector('.tela2').classList.toggle('escondido')
-  const id = elemento.querySelector('img')
-  const dataId = id.getAttribute('data-id')
-  const promise = axios.get(
-    `https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`
-  )
+}
 
-  promise.then(function (response) {
-    quizzSelecionado = response.data
-    renderizarQuizzSelecionado(quizzSelecionado)
+function selecionarQuizz(elemento){
+  const mainContainer = document.querySelector('.mainContainer').classList.toggle('escondido');
+  const quizzTitle = document.querySelector('.quizztitle').classList.toggle('escondido');
+  const tela2 = document.querySelector('.tela2').classList.toggle('escondido');
+  const id = elemento.querySelector("img")
+  const dataId = id.getAttribute("data-id")
+  const promise = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`);
+  
+  
+  promise.then(function(response){
+    quizzSelecionado = response.data;
+    renderizarQuizzSelecionado(quizzSelecionado);
+
   })
-  promise.catch(erroSelecionarQuizz)
+  promise.catch(function(erro){
+    console.log(erro.response)
+  })
 }
 
-function renderizarQuizzSelecionado(quizzSelecionado) {
-  const quizzTitle = document.querySelector('.quizztitle')
-  const title = document.querySelector('.quizztitle p')
-  const tela2 = document.querySelector('.tela2')
-  const perguntasDosQuizz = document.querySelector('.perguntasDoQuizz')
-  const perguntas = quizzSelecionado.questions
 
+
+function renderizarQuizzSelecionado(quizzSelecionado){
+  const quizzTitle = document.querySelector(".quizztitle");
+  const title = document.querySelector(".quizztitle p");
+  const tela2 = document.querySelector('.tela2');
+  const perguntasDosQuizz = document.querySelector(".perguntasDoQuizz")
+  const perguntas = quizzSelecionado.questions
+  
+
+
+  
+  
   quizzTitle.style.backgroundImage = `url(${quizzSelecionado.image})`
   title.innerHTML = `${quizzSelecionado.title}`
-
-  for (let i = 0; i < perguntas.length; i++) {
-    const respostas = perguntas[i].answers
-
+  
+  
+  for( let i = 0; i < perguntas.length; i++ ){
+    const respostas = perguntas[i].answers;
+    
     respostas.sort(embaralharRespostas)
-
+    
     tela2.innerHTML += `
       <div class="perguntasDoQuizz">
         <div class="perguntaDoQuizz" style="background-color:${perguntas[i].color}">
@@ -464,33 +512,48 @@ function renderizarQuizzSelecionado(quizzSelecionado) {
       </div>
     
     `
-    const opcoesDeRespostas = document.querySelectorAll('.opcoesDeRespostas')
-    for (let z = 0; z < respostas.length; z++) {
-      opcoesDeRespostas[i].innerHTML += `
-      <div class="opcao" onclick="respostaEscolhida(this)">
+    const opcoesDeRespostas = document.querySelectorAll(".opcoesDeRespostas")
+    for(let z = 0; z < respostas.length; z ++){
+      opcoesDeRespostas[i].innerHTML +=`
+      <div class="opcao" data-isCorrect="${respostas[z].isCorrectAnswer}" onclick="respostaEscolhida(this,quizzSelecionado)">
+        <div class=""></div>
         <img src=${respostas[z].image} alt="">
         <p>${respostas[z].text}</p>
       </div>
       
       `
+      
     }
   }
+ 
 }
-function erroSelecionarQuizz(error) {
-  console.log(erro.response)
-}
-
-function embaralharRespostas() {
-  return Math.random() - 0.5
+  
+function embaralharRespostas(){
+  return Math.random() - 0.5;
 }
 
-function respostaEscolhida(elemento) {
-  // for(let i = 0; i < perguntas.length; i++){
-  //   if()
-  // }
+function respostaEscolhida(elemento,quizzSelecionado){
+  
+  const opcoesDeRespostas = elemento.parentNode.querySelectorAll('.opcao');
+  
+  opcoesDeRespostas.forEach(function(opcao){
+    opcao.querySelector("div").classList.add("naoSelecionado");
+    elemento.querySelector("div").classList.remove("naoSelecionado");
+    if(opcao.getAttribute("data-isCorrect") === "true"){
+      opcao.querySelector("p").style.color="green";
+      console.log(opcao)
+    }else{
+      opcao.querySelector("p").style.color="red";
+
+    }
+
+
+  })
 }
+    
 
 pegarQuizz()
+<<<<<<< HEAD
 function pegarQuizzDoNavegador() {
   const pegarQuizz = localStorage.getItem('seusQuizzes')
   if (pegarQuizz === null) {
@@ -503,3 +566,7 @@ function mandarQuizzParaNavegador() {
   const dadosSerializados = JSON.stringify(seusQuizzes)
   localStorage.setItem('seusQuizzes', `${dadosSerializados}`)
 }
+=======
+
+
+>>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
