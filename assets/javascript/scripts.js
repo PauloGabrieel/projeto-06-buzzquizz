@@ -19,10 +19,14 @@ function removerQuizz(elemento) {
 function verificarSeusQuizzes() {
   const tamanho = document
     .querySelector('.containerQuizz')
-    .querySelectorAll('img').length
+    .querySelectorAll('.containerImagem').length
   if (tamanho === 0) {
     document.querySelector('.seusQuizz').classList.toggle('escondido')
     document.querySelector('.semQuizz').classList.toggle('escondido')
+    return
+  } else if (tamanho === 1) {
+    document.querySelector('.seusQuizz').classList.remove('escondido')
+    document.querySelector('.semQuizz').classList.add('escondido')
   }
 }
 let quantidadePerguntas = 0
@@ -50,7 +54,6 @@ function prosseguir(elemento) {
     const url = elemento.parentNode.querySelectorAll('input')[1].value
     quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2].value
     quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3].value
-<<<<<<< HEAD
     seuQuizz.title = titulo
     seuQuizz.image = url
     if (titulo.length < 20 || titulo.length > 65) {
@@ -138,8 +141,6 @@ function prosseguir(elemento) {
       botoes[i + 1].parentNode.scrollIntoView()
       return
     }
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
   }
   seuQuizz.title = titulo
   seuQuizz.image = url
@@ -164,7 +165,6 @@ function prosseguir(elemento) {
         return
       }
     }
-<<<<<<< HEAD
     seusQuizzes.push(seuQuizz)
     mandarQuizzParaNavegador()
     renderizarSeusQuizzes()
@@ -188,13 +188,8 @@ function prosseguir(elemento) {
   seuQuizz = {}
   for (let i = 0; i < 4; i++) {
     document.querySelectorAll('input')[i].value = ''
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
   }
 }
-
-
-
 
 function verificarPerguntas(elemento) {
   let perguntas = []
@@ -225,7 +220,6 @@ function verificarPerguntas(elemento) {
         }
       }
       if (j === 2 || j === 3) {
-<<<<<<< HEAD
         if (input[j + i * 10].value.trim() === '') {
           alert('preencha os dados corretamente')
           return true
@@ -251,8 +245,6 @@ function verificarPerguntas(elemento) {
         return true
       }
       if (j === 4 || j === 6 || j === 8) {
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
         if (
           elemento.parentNode
             .querySelectorAll('input')
@@ -399,7 +391,6 @@ function renderizarNiveis(num) {
     `
   }
 }
-<<<<<<< HEAD
 function renderizarSeusQuizzes() {
   console.log(seusQuizzes)
   const localizar = document.querySelector('.containerQuizz')
@@ -426,8 +417,6 @@ function voltarHome() {
   document.querySelector('.tela3').classList.toggle('escondido')
   document.querySelector('.tela1').classList.toggle('escondido')
 }
-=======
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
 
 function pegarQuizz() {
   const promise = axios.get(API)
@@ -435,15 +424,14 @@ function pegarQuizz() {
   promise.catch(tratarErro)
 }
 function carregarTodosQuizz(response) {
-  todosQuizz = response.data;
-  renderizarTodosQuizzes(todosQuizz);
+  todosQuizz = response.data
+  renderizarTodosQuizzes(todosQuizz)
 }
-function renderizarTodosQuizzes(todosQuizz){
-  const containerQuizz = document.querySelector('.todosQuizz .containerQuizz');
-  
-  containerQuizz.innerHTML = ''
-  for(let i = 0; i< todosQuizz.length; i++){  
+function renderizarTodosQuizzes(todosQuizz) {
+  const containerQuizz = document.querySelector('.todosQuizz .containerQuizz')
 
+  containerQuizz.innerHTML = ''
+  for (let i = 0; i < todosQuizz.length; i++) {
     containerQuizz.innerHTML += `
       <div class="containerImagem" onclick="selecionarQuizz(this)">
         <div class="fundoDegrader"></div>
@@ -453,54 +441,47 @@ function renderizarTodosQuizzes(todosQuizz){
     
     `
   }
-  
-  
 }
-function tratarErro(erro) {
+function tratarErro(erro) {}
 
-}
+function selecionarQuizz(elemento) {
+  const mainContainer = document
+    .querySelector('.mainContainer')
+    .classList.toggle('escondido')
+  const quizzTitle = document
+    .querySelector('.quizztitle')
+    .classList.toggle('escondido')
+  const tela2 = document.querySelector('.tela2').classList.toggle('escondido')
+  const id = elemento.querySelector('img')
+  const dataId = id.getAttribute('data-id')
+  const promise = axios.get(
+    `https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`
+  )
 
-function selecionarQuizz(elemento){
-  const mainContainer = document.querySelector('.mainContainer').classList.toggle('escondido');
-  const quizzTitle = document.querySelector('.quizztitle').classList.toggle('escondido');
-  const tela2 = document.querySelector('.tela2').classList.toggle('escondido');
-  const id = elemento.querySelector("img")
-  const dataId = id.getAttribute("data-id")
-  const promise = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`);
-  
-  
-  promise.then(function(response){
-    quizzSelecionado = response.data;
-    renderizarQuizzSelecionado(quizzSelecionado);
-
+  promise.then(function (response) {
+    quizzSelecionado = response.data
+    renderizarQuizzSelecionado(quizzSelecionado)
   })
-  promise.catch(function(erro){
+  promise.catch(function (erro) {
     console.log(erro.response)
   })
 }
 
-
-
-function renderizarQuizzSelecionado(quizzSelecionado){
-  const quizzTitle = document.querySelector(".quizztitle");
-  const title = document.querySelector(".quizztitle p");
-  const tela2 = document.querySelector('.tela2');
-  const perguntasDosQuizz = document.querySelector(".perguntasDoQuizz")
+function renderizarQuizzSelecionado(quizzSelecionado) {
+  const quizzTitle = document.querySelector('.quizztitle')
+  const title = document.querySelector('.quizztitle p')
+  const tela2 = document.querySelector('.tela2')
+  const perguntasDosQuizz = document.querySelector('.perguntasDoQuizz')
   const perguntas = quizzSelecionado.questions
-  
 
-
-  
-  
   quizzTitle.style.backgroundImage = `url(${quizzSelecionado.image})`
   title.innerHTML = `${quizzSelecionado.title}`
-  
-  
-  for( let i = 0; i < perguntas.length; i++ ){
-    const respostas = perguntas[i].answers;
-    
+
+  for (let i = 0; i < perguntas.length; i++) {
+    const respostas = perguntas[i].answers
+
     respostas.sort(embaralharRespostas)
-    
+
     tela2.innerHTML += `
       <div class="perguntasDoQuizz">
         <div class="perguntaDoQuizz" style="background-color:${perguntas[i].color}">
@@ -512,9 +493,9 @@ function renderizarQuizzSelecionado(quizzSelecionado){
       </div>
     
     `
-    const opcoesDeRespostas = document.querySelectorAll(".opcoesDeRespostas")
-    for(let z = 0; z < respostas.length; z ++){
-      opcoesDeRespostas[i].innerHTML +=`
+    const opcoesDeRespostas = document.querySelectorAll('.opcoesDeRespostas')
+    for (let z = 0; z < respostas.length; z++) {
+      opcoesDeRespostas[i].innerHTML += `
       <div class="opcao" data-isCorrect="${respostas[z].isCorrectAnswer}" onclick="respostaEscolhida(this,quizzSelecionado)">
         <div class=""></div>
         <img src=${respostas[z].image} alt="">
@@ -522,38 +503,30 @@ function renderizarQuizzSelecionado(quizzSelecionado){
       </div>
       
       `
-      
     }
   }
- 
-}
-  
-function embaralharRespostas(){
-  return Math.random() - 0.5;
 }
 
-function respostaEscolhida(elemento,quizzSelecionado){
-  
-  const opcoesDeRespostas = elemento.parentNode.querySelectorAll('.opcao');
-  
-  opcoesDeRespostas.forEach(function(opcao){
-    opcao.querySelector("div").classList.add("naoSelecionado");
-    elemento.querySelector("div").classList.remove("naoSelecionado");
-    if(opcao.getAttribute("data-isCorrect") === "true"){
-      opcao.querySelector("p").style.color="green";
+function embaralharRespostas() {
+  return Math.random() - 0.5
+}
+
+function respostaEscolhida(elemento, quizzSelecionado) {
+  const opcoesDeRespostas = elemento.parentNode.querySelectorAll('.opcao')
+
+  opcoesDeRespostas.forEach(function (opcao) {
+    opcao.querySelector('div').classList.add('naoSelecionado')
+    elemento.querySelector('div').classList.remove('naoSelecionado')
+    if (opcao.getAttribute('data-isCorrect') === 'true') {
+      opcao.querySelector('p').style.color = 'green'
       console.log(opcao)
-    }else{
-      opcao.querySelector("p").style.color="red";
-
+    } else {
+      opcao.querySelector('p').style.color = 'red'
     }
-
-
   })
 }
-    
 
 pegarQuizz()
-<<<<<<< HEAD
 function pegarQuizzDoNavegador() {
   const pegarQuizz = localStorage.getItem('seusQuizzes')
   if (pegarQuizz === null) {
@@ -566,7 +539,3 @@ function mandarQuizzParaNavegador() {
   const dadosSerializados = JSON.stringify(seusQuizzes)
   localStorage.setItem('seusQuizzes', `${dadosSerializados}`)
 }
-=======
-
-
->>>>>>> 3d94cfde9e2e19121ead3853ae0d7fa20e6e0cc6
