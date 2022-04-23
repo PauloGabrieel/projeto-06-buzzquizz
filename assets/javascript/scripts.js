@@ -1,4 +1,5 @@
 let todosQuizz = []
+let seusQuizzes = []
 let quizzSelecionado = {}
 let seuQuizz = {}
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
@@ -32,30 +33,17 @@ function verificarSeusQuizzes() {
 let quantidadePerguntas = 0
 let quantidadeNivel = 0
 function prosseguir(elemento) {
+  const botoes = document.querySelectorAll('.botaoProsseguir')
+  const inputRespostas = botoes[1].parentNode.querySelectorAll('input')
+  const inputNiveis = botoes[2].parentNode.querySelectorAll('input')
   if (elemento === botoes[0]) {
-    // if (titulo.length < 20 || titulo.length > 65) {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    // if (perguntas < 3) {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    // if (niveis < 2) {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    // if (url.slice(0, 8) !== 'https://') {
-    //   alert('preencha os dados corretamente')
-    //   return
-    // }
-    const botoes = document.querySelectorAll('.botaoProsseguir')
     const titulo = elemento.parentNode.querySelectorAll('input')[0].value
     const url = elemento.parentNode.querySelectorAll('input')[1].value
     quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2].value
     quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3].value
     seuQuizz.title = titulo
     seuQuizz.image = url
+
     if (titulo.length < 20 || titulo.length > 65) {
       alert('preencha os dados corretamente')
       return
@@ -76,9 +64,9 @@ function prosseguir(elemento) {
     renderizarNiveis(quantidadeNivel)
   }
   if (elemento === botoes[1]) {
-    // if (verificarPerguntas(elemento) === true) {
-    //   return
-    // }
+    if (verificarPerguntas(elemento) === true) {
+      return
+    }
     let perguntas = []
     let respostas = []
     for (let i = 0; i < quantidadePerguntas; i++) {
@@ -119,9 +107,9 @@ function prosseguir(elemento) {
     for (let i = 0; i < quantidadeNivel; i++) {
       let nivel = {}
       nivel.title = inputNiveis[0 + i * 4].value
-      nivel.image = inputNiveis[1 + i * 4].value
-      nivel.text = inputNiveis[2 + i * 4].value
-      nivel.minValue = inputNiveis[3 + i * 4].value
+      nivel.minValue = inputNiveis[1 + i * 4].value
+      nivel.image = inputNiveis[2 + i * 4].value
+      nivel.text = inputNiveis[3 + i * 4].value
       niveis.push(nivel)
     }
     seuQuizz.levels = niveis
@@ -142,78 +130,61 @@ function prosseguir(elemento) {
       return
     }
   }
-  seuQuizz.title = titulo
-  seuQuizz.image = url
-  renderizarPerguntas(quantidadePerguntas)
-  renderizarNiveis(quantidadeNivel)
+
   if (elemento === botoes[botoes.length - 1]) {
-    if (elemento === botoes[1]) {
-      if (verificarPerguntas(elemento) === true) {
-        return
-      }
+    for (let i = 0; i < seuQuizz.questions.length; i++) {
+      seuQuizz.questions[i].answers = seuQuizz.questions[i].answers.filter(
+        function (elemento) {
+          if (elemento.image.trim() === '') {
+            return false
+          }
+          return true
+        }
+      )
     }
-    document.querySelector('.telaDecidaNiveis').classList.toggle('escondido')
-    document.querySelector('.tela3').classList.toggle('escondido')
-    document.querySelector('.tela1').classList.toggle('escondido')
-    document.querySelector('.tela1').scrollIntoView(true)
-  } else {
-    for (let i = 0; i < botoes.length - 1; i++) {
-      if (elemento === botoes[i]) {
-        botoes[i].parentNode.classList.toggle('escondido')
-        botoes[i + 1].parentNode.classList.toggle('escondido')
-        botoes[i + 1].parentNode.scrollIntoView()
-        return
-      }
-    }
-    seusQuizzes.push(seuQuizz)
-    mandarQuizzParaNavegador()
-    renderizarSeusQuizzes()
-    verificarSeusQuizzes()
     elemento.parentNode.classList.toggle('escondido')
     document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
+    document.querySelector('.telaQuizzPronto').scrollIntoView(false)
     let localizar = document.querySelector('.quizzNovo')
     localizar.innerHTML = `
-      <div class="containerImagem">
-        <div class="fundoDegrader"></div>
-        <img
-        src="${seuQuizz.image}"
-        alt=""
-        />
-        <p>
-          ${seuQuizz.title}
-        </p>
-      </div>
-    `
-  }
-  seuQuizz = {}
-  for (let i = 0; i < 4; i++) {
-    document.querySelectorAll('input')[i].value = ''
+    <div class="containerImagem">
+      <div class="fundoDegrader"></div>
+      <img
+      src="${seuQuizz.image}"
+      />
+      <p>
+        ${seuQuizz.title}
+      </p>
+    </div>
+  `
+    mandarQuizzServidor(seuQuizz)
+    // seusQuizzes.push(seuQuizz)
+    // mandarQuizzParaNavegador()
+    // renderizarSeusQuizzes()
+    // verificarSeusQuizzes()
   }
 }
 
 function verificarPerguntas(elemento) {
-  let perguntas = []
-  let tituloPergunta = elemento.parentNode.querySelectorAll('input')[0]
-  let corDeFundoPergunta = elemento.parentNode.querySelectorAll('input')[1]
-  for (let i = 0; i < quantidadePergunta; i++) {
-    for (let j = 0; j < 10 * quantidadePergunta; j++) {
-      let pergunta = {}
+  let perguntasErradasVazias = 0
+  const input = elemento.parentNode.querySelectorAll('input')
+  // let perguntas = []
+  // let tituloPergunta = elemento.parentNode.querySelectorAll('input')[0]
+  // let corDeFundoPergunta = elemento.parentNode.querySelectorAll('input')[1]
+  for (let i = 0; i < quantidadePerguntas; i++) {
+    for (let j = 0; j < 10; j++) {
+      // let pergunta = {}
       if (j === 0) {
-        if (
-          elemento.parentNode.querySelectorAll('input')[0 + i * 10].value
-            .length < 20
-        ) {
+        if (input[0 + i * 10].value.length < 20) {
           alert('preencha os dados corretamente')
           return true
         }
       }
       if (j === 1) {
         if (
-          elemento.parentNode
-            .querySelectorAll('input')
-            [1 + i * 10].value.slice(0, 1) !== '#' ||
-          elemento.parentNode.querySelectorAll('input')[1 + i * 10].value
-            .length !== 7
+          input[1 + i * 10].value.slice(0, 1) !== '#' ||
+          input[1 + i * 10].value.length !== 7 ||
+          !verificaHexadecimal(input[1 + i * 10].value)
         ) {
           alert('preencha os dados corretamente')
           return true
@@ -225,7 +196,13 @@ function verificarPerguntas(elemento) {
           return true
         }
       }
-      if (j === 3 || j === 5 || j === 7 || j === 9) {
+      if (j === 3) {
+        if (input[3 + i * 10].value.slice(0, 8) !== 'https://') {
+          alert('preencha os dados corretamente')
+          return true
+        }
+      }
+      if (j === 5 || j === 7 || j === 9) {
         if (input[j + i * 10].value.slice(0, 8) !== 'https://') {
           if (input[j + i * 10].value.trim() === '') {
             return false
@@ -248,13 +225,19 @@ function verificarPerguntas(elemento) {
         if (
           elemento.parentNode
             .querySelectorAll('input')
-            [j + i * 10].value.trim() === ''
+            [j + i * 10].value.trim() === '' &&
+          elemento.parentNode
+            .querySelectorAll('input')
+            [j + 1 + i * 10].value.trim() === ''
         ) {
-          alert('preencha os dados corretamente')
-          return true
+          perguntasErradasVazias++
         }
       }
     }
+  }
+  if (perguntasErradasVazias > 2 * quantidadePerguntas) {
+    alert('preencha os dados corretamente')
+    return true
   }
 }
 function verificarNiveis() {
@@ -299,13 +282,12 @@ function verificarNiveis() {
   }
 }
 function renderizarPerguntas(num) {
-  console.log('entrou no renderizar nivel')
   let local = document.querySelector('.perguntas')
   local.innerHTML = ''
   for (let i = 1; i <= num; i++) {
     local.innerHTML += `
-    <li class = "ocultarPergunta">
-      <div class="pergunta">
+    <li>
+      <div class="pergunta ocultarPergunta">
         <div class="between">
           <h6>Pergunta ${i}</h6>
           <img
@@ -335,10 +317,11 @@ function renderizarPerguntas(num) {
 }
 function proximaPergunta(elemento) {
   const pai = elemento.parentNode.parentNode.parentNode.parentNode
-  const li = elemento.parentNode.parentNode.parentNode
+  const pergunta = elemento.parentNode.parentNode
+  const li = pai.querySelectorAll('li')
   if (pai.querySelector('.perguntaSelecionada') === null) {
-    li.classList.toggle('perguntaSelecionada')
-    li.classList.toggle('ocultarPergunta')
+    pergunta.classList.toggle('perguntaSelecionada')
+    pergunta.classList.toggle('ocultarPergunta')
   } else {
     pai
       .querySelector('.perguntaSelecionada')
@@ -346,20 +329,16 @@ function proximaPergunta(elemento) {
     pai
       .querySelector('.perguntaSelecionada')
       .classList.toggle('perguntaSelecionada')
-    li.classList.toggle('perguntaSelecionada')
-    li.classList.toggle('ocultarPergunta')
+    pergunta.classList.toggle('perguntaSelecionada')
+    pergunta.classList.toggle('ocultarPergunta')
   }
-  // const arrayPerguntas = document
-  //   .querySelector('.perguntas')
-  //   .querySelectorAll('li')
-  // for (let i = 0; i < arrayPerguntas; i++) {
-  //   if (li === arrayPerguntas[0]) {
-  //     pai.scrollIntoView()
-  //   }
-  //   if (li === arrayPerguntas[i]) {
-  //     arrayPerguntas[i - 1].scrollIntoView()
-  //   }
-  // }
+  for (let i = 0; i < li.length; i++) {
+    if (elemento.parentNode.parentNode.parentNode === li[0]) {
+      pai.parentNode.querySelector('h4').scrollIntoView({ behavior: 'smooth' })
+    } else if (elemento.parentNode.parentNode.parentNode === li[i]) {
+      li[i - 1].scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 }
 function renderizarNiveis(num) {
   const localizar = document.querySelector('.niveis')
@@ -367,7 +346,7 @@ function renderizarNiveis(num) {
   for (let i = 1; i <= num; i++) {
     localizar.innerHTML += `
     <li>
-      <div class="nivel">
+      <div class="nivel ocultarPergunta">
         <div class="between" style="width: 100%">
           <h6>Nivel ${i}</h6>
           <img
@@ -392,12 +371,11 @@ function renderizarNiveis(num) {
   }
 }
 function renderizarSeusQuizzes() {
-  console.log(seusQuizzes)
   const localizar = document.querySelector('.containerQuizz')
   localizar.innerHTML = ''
   for (let i = 0; i < seusQuizzes.length; i++) {
     localizar.innerHTML += `
-  <div class="containerImagem" onclick="funcaoASerImplementada(this)">
+  <div class="containerImagem" onclick="selecionarQuizz(this)">
   <div class="fundoDegrader"></div>
   <img
     src="${seusQuizzes[i].image}"
@@ -424,7 +402,9 @@ function pegarQuizz() {
   promise.catch(tratarErro)
 }
 function carregarTodosQuizz(response) {
-  todosQuizz = response.data
+  response.data.map(function (elemento) {
+    todosQuizz.push(elemento)
+  })
   renderizarTodosQuizzes(todosQuizz)
 }
 function renderizarTodosQuizzes(todosQuizz) {
@@ -453,18 +433,26 @@ function selecionarQuizz(elemento) {
     .classList.toggle('escondido')
   const tela2 = document.querySelector('.tela2').classList.toggle('escondido')
   const id = elemento.querySelector('img')
-  const dataId = id.getAttribute('data-id')
-  const promise = axios.get(
-    `https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`
-  )
+  // const dataId = id.getAttribute('data-id')
+  // const promise = axios.get(
+  //   `https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${dataId}`
+  // )
 
-  promise.then(function (response) {
-    quizzSelecionado = response.data
-    renderizarQuizzSelecionado(quizzSelecionado)
+  // promise.then(function (response) {
+  //   quizzSelecionado = response.data
+  //   renderizarQuizzSelecionado(quizzSelecionado)
+  // })
+  // promise.catch(function (erro) {
+  //   console.log(erro.response)
+  // })
+  const dataId = elemento.querySelector('[data-id]').getAttribute('data-id')
+  const elementoSelecionado = todosQuizz.filter(function (elemento) {
+    if (elemento.id == dataId) {
+      return true
+    }
+    return false
   })
-  promise.catch(function (erro) {
-    console.log(erro.response)
-  })
+  renderizarQuizzSelecionado(elementoSelecionado)
 }
 
 function renderizarQuizzSelecionado(quizzSelecionado) {
@@ -472,10 +460,10 @@ function renderizarQuizzSelecionado(quizzSelecionado) {
   const title = document.querySelector('.quizztitle p')
   const tela2 = document.querySelector('.tela2')
   const perguntasDosQuizz = document.querySelector('.perguntasDoQuizz')
-  const perguntas = quizzSelecionado.questions
+  const perguntas = quizzSelecionado[0].questions
 
-  quizzTitle.style.backgroundImage = `url(${quizzSelecionado.image})`
-  title.innerHTML = `${quizzSelecionado.title}`
+  quizzTitle.style.backgroundImage = `url(${quizzSelecionado[0].image})`
+  title.innerHTML = `${quizzSelecionado[0].title}`
 
   for (let i = 0; i < perguntas.length; i++) {
     const respostas = perguntas[i].answers
@@ -519,7 +507,6 @@ function respostaEscolhida(elemento, quizzSelecionado) {
     elemento.querySelector('div').classList.remove('naoSelecionado')
     if (opcao.getAttribute('data-isCorrect') === 'true') {
       opcao.querySelector('p').style.color = 'green'
-      console.log(opcao)
     } else {
       opcao.querySelector('p').style.color = 'red'
     }
@@ -538,4 +525,42 @@ function pegarQuizzDoNavegador() {
 function mandarQuizzParaNavegador() {
   const dadosSerializados = JSON.stringify(seusQuizzes)
   localStorage.setItem('seusQuizzes', `${dadosSerializados}`)
+}
+function mandarQuizzServidor(quizz) {
+  const quizzMandadoServidor = axios.post(API, quizz)
+  quizzMandadoServidor.then(function (response) {
+    //armazeno o quizz
+    //coloco o quizz no navegador
+    // visualizacaoDoQuizzFinalizado(quizz)
+    seuQuizz.id = response.data.id
+    seuQuizz.key = response.data.key
+    seusQuizzes.push(quizz)
+    renderizarSeusQuizzes()
+    mandarQuizzParaNavegador()
+    seuQuizz = {}
+    for (let i = 0; i < 4; i++) {
+      document.querySelectorAll('input')[i].value = ''
+    }
+  })
+
+  quizzMandadoServidor.catch(function () {})
+}
+// function visualizacaoDoQuizzFinalizado(quizz) {}
+function verificaHexadecimal(hexadecimal) {
+  let contador = 0
+  const letrasParaVerificar = ['A', 'B', 'C', 'D', 'E', 'F']
+  for (let i = 1; i < hexadecimal.length; i++) {
+    for (let j = 0; j < letrasParaVerificar.length; j++) {
+      if (
+        hexadecimal.toUpperCase().slice(i, i + 1) === letrasParaVerificar[j]
+      ) {
+        contador++
+        break
+      }
+    }
+  }
+  if (contador === 6) {
+    return true
+  }
+  return false
 }
