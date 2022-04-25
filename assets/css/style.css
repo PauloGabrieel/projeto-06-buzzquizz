@@ -3,6 +3,7 @@
 }
 body, html {
   overflow-x: hidden !important;
+  scroll-behavior: smooth;
   }
 body{
   display: flex;
@@ -368,6 +369,9 @@ li{
   color: #fff;
   
 }
+.porcentagemAcerto p{
+  text-align: center;
+}
 .opcoesDeRespostas,.resultado{
   display: flex;
   flex-wrap: wrap;
@@ -378,6 +382,7 @@ li{
 }
 .resultado{
   flex-wrap: nowrap;
+  
 }
 .resultado img{
   width: 364px;
