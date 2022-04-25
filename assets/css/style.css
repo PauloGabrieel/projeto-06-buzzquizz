@@ -2,6 +2,9 @@
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
 }
+html {
+  scroll-behavior: smooth;
+}
 body{
   display: flex;
   flex-direction: column;
@@ -330,6 +333,7 @@ li{
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 .perguntasDoQuizz,.resultadoQuizz {
   margin-top: 42px;
@@ -355,6 +359,9 @@ li{
   color: #fff;
   
 }
+.porcentagemAcerto p{
+  text-align: center;
+}
 .opcoesDeRespostas,.resultado{
   display: flex;
   flex-wrap: wrap;
@@ -363,6 +370,7 @@ li{
 }
 .resultado{
   flex-wrap: nowrap;
+  
 }
 .resultado img{
   width: 364px;

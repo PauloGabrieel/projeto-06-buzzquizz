@@ -1,6 +1,6 @@
 let todosQuizz = []
 let seusQuizzes = []
-let quizzSelecionado = {}
+let quizzSelecionado = []
 let seuQuizz = {}
 let acertos = 0
 let jogadas = 0
@@ -452,14 +452,17 @@ function selecionarQuizz(elemento) {
   //   console.log(erro.response)
   // })
   const dataId = elemento.querySelector('[data-id]').getAttribute('data-id')
-  const elementoSelecionado = todosQuizz.filter(function (elemento) {
-    if (elemento.id == dataId) {
-      return true
-    }
-    return false
-  })
+  quizzSelecionado.push(
+    todosQuizz.filter(function (elemento) {
+      if (elemento.id == dataId) {
+        return true
+      }
+      return false
+    })
+  )
 
-  renderizarQuizzSelecionado(elementoSelecionado)
+  renderizarQuizzSelecionado(quizzSelecionado[0])
+  
 }
 
 function renderizarQuizzSelecionado(quizzSelecionado) {
@@ -472,9 +475,11 @@ function renderizarQuizzSelecionado(quizzSelecionado) {
   const perguntas = quizzSelecionado[0].questions
   levels = quizzSelecionado[0].levels
 
+  tela2.innerHTML = ""
+
   quizzTitle.style.backgroundImage = `url(${quizzSelecionado[0].image})`
   title.innerHTML = `${quizzSelecionado[0].title}`
-
+  
   for (let i = 0; i < perguntas.length; i++) {
     const respostas = perguntas[i].answers
 
@@ -503,6 +508,7 @@ function renderizarQuizzSelecionado(quizzSelecionado) {
       `
     }
   }
+  tela2.innerHTML+=`<div class="resultadoQuizz escondido"></div>`
 }
 
 function embaralharRespostas() {
@@ -512,7 +518,8 @@ function embaralharRespostas() {
 function respostaEscolhida(elemento, qtdPerguntas) {
   const clicado = elemento.parentNode
   const opcoesDeRespostas = elemento.parentNode.querySelectorAll('.opcao')
-
+  const pergunta = document.querySelectorAll(".perguntasDoQuizz")
+  
   if (clicado.classList.contains('clicado') === false) {
     jogadas++
     if (elemento.getAttribute('data-isCorrect') === 'true') {
@@ -532,69 +539,123 @@ function respostaEscolhida(elemento, qtdPerguntas) {
   } else {
     return
   }
-
+  setTimeout(function(){ pergunta[jogadas].scrollIntoView()}, 2000)
+  
   clicado.classList.add('clicado')
   if (jogadas === qtdPerguntas) {
+
     fimDeJogo(acertos, qtdPerguntas, levels)
+    
   }
 }
 
 function fimDeJogo(acertos, qtdPerguntas, levels) {
-  const tela2 = document.querySelector('.tela2')
-  const porcentagem = (acertos * 100) / qtdPerguntas
+  // const tela2 = document.querySelector('.tela2')
+  const resultadoQuizz = document.querySelector(".resultadoQuizz");
+  resultadoQuizz.classList.remove('escondido')
 
-  tela2.innerHTML += `
-  <div class="resultadoQuizz">
+  const porcentagem = Math.floor((acertos * 100) / qtdPerguntas)
+  let verificarLevel = 0;
+  let resultadoLevel = [];
+  resultadoQuizz.innerHTML = `
+  
       <div class="porcentagemAcerto">
-          <p>88% de acerto: Você é praticamente um aluno de Hogwarts!</p>
+          
       </div>
       <div class="resultado">
-          <img src="./assets/images/seleca0-brasileira.jpg" alt="">
-          <p>Parabéns Potterhead! Bem-vindx a Hogwarts, aproveite o loop infinito de comida e clique no botão abaixo para usar o vira-tempo e reiniciar este teste.</p>
+          
       </div>
-      <div class="reiniciarQuizz" onclick="renderizarQuizzSelecionado()">
+      <div class="reiniciarQuizz" onclick="reiniciarQuizz()">
           Reiniciar Quizz
       </div>
       <div class="voltarHome" onclick="voltarHome()">Voltar pra home</div>
-  </div>
+  
 
   `
-  let nivelAcerto = levels.map(nivel => nivel.minValue)
-
-  const p = document.querySelector('.porcentagemAcerto p')
-  p.innerHTML = `<p> ${porcentagem}% de acerto:`
+  
+  const faixaDelevel = levels.map(level => level.minValue) 
+  faixaDelevel.sort((a,b)=> a - b)
+  for(let i = 0; i < faixaDelevel.length; i++){
+    if(porcentagem > faixaDelevel[faixaDelevel.length - 1]){
+         verificarLevel = faixaDelevel[faixaDelevel.length-1]
+        break
+    }
+    if (porcentagem == faixaDelevel[i]){
+        verificarLevel = faixaDelevel[i]
+        break
+    }
+    if (porcentagem <= faixaDelevel[i]){
+        verificarLevel = faixaDelevel[i - 1]
+  }
+}
+  
+  function verificar(levels, verificarLevel){
+    for(let i = 0; i < levels.length; i++){
+      if(levels[i].minValue === verificarLevel){
+        resultadoLevel.push(levels[i])
+      }
+    }
+    
+    console.log(levels)
+    console.log(verificarLevel)
+    
+  }
+  verificar(levels,verificarLevel)
+  console.log(resultadoLevel)
+  
+  
+  
+  // const resultadoQuizz = document.querySelector(".resultadoQuizz");
+  
+  const renderizarTitulo = document.querySelector('.porcentagemAcerto')
+  const renderizarImgEhTexto = document.querySelector(".resultadoQuizz .resultado")
+  
+  renderizarTitulo.innerHTML = `<p> ${porcentagem}% de acerto:${resultadoLevel[0].title}</p>`
+  renderizarImgEhTexto.innerHTML = `
+                                    <img src="${resultadoLevel[0].image}" alt="">
+                                    <p>${resultadoLevel[0].text}</p>
+  `
+  
+  
+  
+  setTimeout(function(){resultadoQuizz.scrollIntoView()}, 2000)
 }
 
-// if(quizzSelecionado.length)
-// console.log(jogadas)
-// console.log(acertos)
+function reiniciarQuizz(){
+  
+  const opcoesDeRespostas = document.querySelectorAll('.opcoesDeRespostas')
+  const resultado = document.querySelector('.resultadoQuizz')
+  resultado.classList.add("escondido")
 
-//   let cliques = 0;
-//   const opcoesDeRespostas = elemento.parentNode.querySelectorAll('.opcao')
-//   let perguntaRespondida = elemento.parentNode;
+  opcoesDeRespostas.forEach(opcao =>{
+    
+    
+   
+    console.log(opcao)
+    console.log(opcao.querySelectorAll('.naoSelecionado'))
 
-//   console.log(elemento.getAttribute("data-iscorrect"))
-//   if(elemento.getAttribute("data-iscorrect")==="true"){
-//     acertos++
-//   }
+    const naoSelecionado = opcao.querySelectorAll('.naoSelecionado')
+    naoSelecionado.forEach(div =>{
+      div.classList.remove('naoSelecionado')
+    })
+    
+    let textos = opcao.querySelectorAll('p')
+    textos.forEach(texto =>{
+      texto.style.color = 'black'
 
-//   if(perguntaRespondida.classList.contains("clicou") === false){
-//     opcoesDeRespostas.forEach(function (opcao) {
-//       opcao.querySelector('div').classList.add('naoSelecionado')
-//       elemento.querySelector('div').classList.remove('naoSelecionado')
+    })
 
-//       if (opcao.getAttribute('data-isCorrect') === 'true') {
-//         opcao.querySelector('p').style.color = 'green'
+    opcao.classList.remove('clicado')
+    
+    
+    
+  })
+  jogadas = 0;
+  acertos = 0;
+  
+  renderizarQuizzSelecionado()
+}
 
-//       } else {
-//         opcao.querySelector('p').style.color = 'red'
-//       }
-//     })
-//   }else{
-//     return
-//   }
-//   perguntaRespondida.classList.add("clicou")
-//   console.log(acertos)
 
 pegarQuizz()
 function pegarQuizzDoNavegador() {
