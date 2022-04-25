@@ -194,7 +194,7 @@ justify-content: center;
   cursor: pointer;
 }
 .tela3{
-  height: 1024px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;

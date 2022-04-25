@@ -52,32 +52,24 @@ function prosseguir(elemento) {
     if (titulo.value.length < 20 || titulo.length > 65) {
       dadosErrados(titulo, span[0])
       erros++
-      // alert('preencha os dados corretamente')
-      // return
     } else {
       verificaInput(titulo, span[0])
     }
     if (quantidadePerguntas.value < 3) {
       dadosErrados(quantidadePerguntas, span[2])
       erros++
-      // alert('preencha os dados corretamente')
-      // return
     } else {
       verificaInput(quantidadePerguntas, span[2])
     }
     if (quantidadeNivel.value < 2) {
       dadosErrados(quantidadeNivel, span[3])
       erros++
-      // alert('preencha os dados corretamente')
-      // return
     } else {
       verificaInput(quantidadeNivel, span[3])
     }
     if (url.value.slice(0, 8) !== 'https://') {
       dadosErrados(url, span[1])
       erros++
-      // alert('preencha os dados corretamente')
-      // return
     } else {
       verificaInput(url, span[1])
     }
@@ -123,7 +115,6 @@ function prosseguir(elemento) {
       perguntas.push(pergunta)
     }
     seuQuizz.questions = perguntas
-    console.log(seuQuizz)
   }
   if (elemento === botoes[2]) {
     if (verificarNiveis() === true) {
@@ -150,7 +141,6 @@ function prosseguir(elemento) {
   }
 
   if (elemento === botoes[botoes.length - 1]) {
-    console.log(seuQuizz)
     for (let i = 0; i < seuQuizz.questions.length; i++) {
       seuQuizz.questions[i].answers = seuQuizz.questions[i].answers.filter(
         function (elemento) {
@@ -161,7 +151,6 @@ function prosseguir(elemento) {
         }
       )
     }
-    console.log(seuQuizz)
     elemento.parentNode.classList.toggle('escondido')
     document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
     document.querySelector('.telaQuizzPronto').scrollIntoView(false)
@@ -171,15 +160,22 @@ function prosseguir(elemento) {
 }
 
 function verificarPerguntas(elemento) {
-  let perguntasErradasVazias = 0
+  // let perguntasErradasVazias = 0
+  let erros = 0
+  let alerta = 0
   const input = elemento.parentNode.querySelectorAll('input')
+  const span = elemento.parentNode.querySelectorAll('span')
   for (let i = 0; i < quantidadePerguntas.value; i++) {
     for (let j = 0; j < 10; j++) {
       // let pergunta = {}
       if (j === 0) {
         if (input[0 + i * 10].value.length < 20) {
-          alert('preencha os dados corretamente')
-          return true
+          // alert('preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[0 + i * 10], span[0 + i * 11])
+        } else {
+          verificaInput(input[0 + i * 10], span[0 + i * 11])
         }
       }
       if (j === 1) {
@@ -188,28 +184,60 @@ function verificarPerguntas(elemento) {
           input[1 + i * 10].value.length !== 7 ||
           !verificaHexadecimal(input[1 + i * 10].value)
         ) {
-          alert('preencha os dados corretamente')
-          return true
+          // alert('preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[1 + i * 10], span[1 + i * 11])
+        } else {
+          verificaInput(input[1 + i * 10], span[1 + i * 11])
         }
       }
       if (j === 2 || j === 3) {
+        // verificar se essa validação está correta
         if (input[j + i * 10].value.trim() === '') {
-          alert('preencha os dados corretamente')
-          return true
+          // alert('preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[j + i * 10], span[j + i * 11])
+        } else {
+          verificaInput(input[j + i * 10], span[j + i * 11])
         }
       }
       if (j === 3) {
         if (input[3 + i * 10].value.slice(0, 8) !== 'https://') {
-          alert('preencha os dados corretamente')
-          return true
+          // alert('preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[3 + i * 10], span[4 + i * 11])
+        } else {
+          verificaInput(input[3 + i * 10], span[4 + i * 11])
         }
       }
+      // if (j === 5 || j === 7 || j === 9) {
+      //   if (input[j + i * 10].value.slice(0, 8) !== 'https://') {
+      //     erros++
+      //     dadosErrados(input[j + i * 10], span[j + 1 + i * 11])
+      //     if (input[j + i * 10].value.trim() === '') {
+      //       erros--
+      //     }
+      //   } else {
+      //     verificaInput(input[j + i * 10], span[j + 1 + i * 11])
+      //   }
+      // }
       if (j === 5 || j === 7 || j === 9) {
-        if (input[j + i * 10].value.slice(0, 8) !== 'https://') {
-          if (input[j + i * 10].value.trim() === '') {
-            return false
+        if (input[j + i * 10].value !== '') {
+          if (input[j + i * 10].value.slice(0, 8) !== 'https://') {
+            erros++
+            dadosErrados(input[j + i * 10], span[j + 1 + i * 11])
+          } else {
+            verificaInput(input[j + i * 10], span[j + 1 + i * 11])
           }
-          return true
+          if (input[j - 1 + i * 10].value === '') {
+            erros++
+            dadosErrados(input[j - 1 + i * 10], span[j + i * 11])
+          } else {
+            verificaInput(input[j - 1 + i * 10], span[j + i * 11])
+          }
         }
       }
       if (
@@ -220,66 +248,116 @@ function verificarPerguntas(elemento) {
         input[8 + i * 10].value.trim() === '' &&
         input[9 + i * 10].value.trim() === ''
       ) {
-        alert('preencha os dados corretamente')
-        return true
+        erros++
+        alerta++
+        // alert(
+        //   'É obrigatório a inserção de pelos menos uma resposta errada em cada pergunta'
+        // )
+        // return true
       }
       if (j === 4 || j === 6 || j === 8) {
-        if (
-          elemento.parentNode
-            .querySelectorAll('input')
-            [j + i * 10].value.trim() === '' &&
-          elemento.parentNode
-            .querySelectorAll('input')
-            [j + 1 + i * 10].value.trim() === ''
-        ) {
-          perguntasErradasVazias++
+        if (input[j + i * 10].value !== '') {
+          if (input[j + 1 + i * 10].value.slice(0, 8) !== 'https://') {
+            erros++
+            dadosErrados(input[j + 1 + i * 10], span[j + 2 + i * 11])
+          } else {
+            verificaInput(input[j + 1 + i * 10], span[j + 2 + i * 11])
+          }
         }
+        // if (
+        //   elemento.parentNode
+        //     .querySelectorAll('input')
+        //     [j + i * 10].value.trim() === '' &&
+        //   elemento.parentNode
+        //     .querySelectorAll('input')
+        //     [j + 1 + i * 10].value.trim() === ''
+        // ) {
+        //   perguntasErradasVazias++
+        // }
       }
     }
   }
-  if (perguntasErradasVazias > 2 * quantidadePerguntas.value) {
-    alert('preencha os dados corretamente')
+  // if (perguntasErradasVazias > 2 * quantidadePerguntas.value) {
+  //   erros++
+  //   alerta++
+  //   // return true
+  // }
+  if (erros > 0) {
+    if (alerta > 0) {
+      alert(
+        'É obrigatório a inserção de pelos menos uma resposta incorreta em cada pergunta'
+      )
+    }
     return true
   }
 }
 function verificarNiveis() {
+  let erros = 0
   const input = document.querySelector('.niveis').querySelectorAll('input')
+  const span = document.querySelector('.niveis').querySelectorAll('span')
   for (let i = 0; i < quantidadeNivel.value; i++) {
     for (j = 0; j < 4; j++) {
       if (j === 0) {
         if (input[0 + 4 * i].value.length < 10) {
-          alert('Preencha os dados corretamente')
-          return true
+          // alert('Preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[0 + i * 4], span[j + i * 4])
+        } else {
+          verificaInput(input[0 + i * 4], span[j + i * 4])
         }
       }
       if (j === 1) {
         if (input[1 + 4 * i].value < 0 || input[1 + 4 * i].value > 100) {
-          alert('Preencha os dados corretamente')
-          return true
+          // alert('Preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[1 + i * 4], span[1 + i * 4])
+        } else {
+          verificaInput(input[0 + i * 4], span[j + i * 4])
         }
       }
       if (j === 2) {
         if (input[2 + 4 * i].value.slice(0, 8) !== 'https://') {
-          alert('Preencha os dados corretamente')
-          return true
+          // alert('Preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[2 + i * 4], span[2 + i * 4])
+        } else {
+          verificaInput(input[2 + i * 4], span[2 + i * 4])
         }
       }
       if (j === 3) {
         if (input[3 + 4 * i].value.length < 30) {
-          alert('Preencha os dados corretamente')
-          return true
+          // alert('Preencha os dados corretamente')
+          // return true
+          erros++
+          dadosErrados(input[3 + i * 4], span[3 + i * 4])
+        } else {
+          verificaInput(input[3 + i * 4], span[3 + i * 4])
         }
       }
     }
   }
+
   let contador = 0
   for (let i = 0; i < quantidadeNivel.value; i++) {
     if (input[1 + 4 * i].value == 0) {
       contador++
     }
   }
+  // if (contador === 0) {
+  //   // alert('Preencha os dados corretamente')
+  //   // return true
+  //   erros++
+  // }
   if (contador === 0) {
-    alert('Preencha os dados corretamente')
+    alert(
+      'É obrigatório existir pelo menos 1 nível cuja % de acerto mínima seja 0%'
+    )
+    return true
+  }
+  if (erros > 0) {
     return true
   }
 }
@@ -301,17 +379,28 @@ function renderizarPerguntas(num) {
           />
         </div>
         <input type="text" placeholder="Texto da pergunta" />
+        <span class = "escondido">Texto da pergunta: no mínimo 20 caracteres</span>
         <input type="text" placeholder="Cor de fundo da pergunta" />
+        <span class = "escondido">Cor de fundo: deve ser uma cor em hexadecimal (começar em "#", seguida de 6 caracteres hexadecimais, ou seja, números ou letras de A a F)</span>
         <h6>Resposta correta</h6>
         <input type="text" placeholder="Resposta correta" />
+        <span class = "escondido">Esse campo é obrigatório</span>
         <input type="url" placeholder="URL da imagem" />
+        <span class = "escondido">Esse campo é obrigatório</span>
+        <span class = "escondido">URL das imagens de resposta: deve ter formato de URL</span>
         <h6>Respostas incorretas</h6>
         <input type="text" placeholder="Resposta incorreta 1" />
+        <span class = "escondido">Preencha esse campo para criar sua resposta</span>
         <input type="url" placeholder="URL da imagem 1" />
+        <span class = "escondido">Deve ter formato de URL</span>
         <input type="text" placeholder="Resposta incorreta 2" />
+        <span class = "escondido">Preencha esse campo para criar sua resposta</span>
         <input type="url" placeholder="URL da imagem 2" />
+        <span class = "escondido">Deve ter formato de URL</span>
         <input type="text" placeholder="Resposta incorreta 3" />
+        <span class = "escondido">Preencha esse campo para criar sua resposta</span>
         <input type="url" placeholder="URL da imagem 3" />
+        <span class = "escondido">Deve ter formato de URL</span>
       </div>
     </li>
    `
@@ -336,9 +425,9 @@ function proximaPergunta(elemento) {
   }
   for (let i = 0; i < li.length; i++) {
     if (elemento.parentNode.parentNode.parentNode === li[0]) {
-      pai.parentNode.querySelector('h4').scrollIntoView({ behavior: 'smooth' })
+      pai.parentNode.querySelector('h4').scrollIntoView()
     } else if (elemento.parentNode.parentNode.parentNode === li[i]) {
-      li[i - 1].scrollIntoView({ behavior: 'smooth' })
+      li[i - 1].scrollIntoView()
     }
   }
 }
@@ -360,13 +449,17 @@ function renderizarNiveis(num) {
           />
         </div>
           <input type="text" placeholder="Título do nível" />
+          <span class = "escondido">Título do nível: mínimo de 10 caracteres</span>
           <input type="text" placeholder="% de acerto mínima" />
+          <span class = "escondido">% de acerto mínima: um número entre 0 e 100</span>
           <input type="url" placeholder="URL da imagem do nível" />
+          <span class = "escondido">URL da imagem do nível: deve ter formato de URL</span>
           <input
           class="descricao"
           type="text"
           placeholder="Descrição do nível"
           />
+          <span class = "escondido">Descrição do nível: mínimo de 30 caracteres</span>
         </div>
     </li>
     `
@@ -375,7 +468,7 @@ function renderizarNiveis(num) {
 function renderizarSeusQuizzes() {
   const localizar = document.querySelector('.containerQuizz')
   localizar.innerHTML = ''
-  for (let i = 0; i < seusQuizzes.length; i++) {
+  for (let i = seusQuizzes.length - 1; i >= 0; i--) {
     localizar.innerHTML += `
     <div class="containerImagem" onclick="selecionarQuizz(this)">
     <div class="fundoDegrader"></div>
@@ -387,9 +480,9 @@ function renderizarSeusQuizzes() {
   verificarSeusQuizzes()
 }
 function voltarHome() {
-  document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
-  document.querySelector('.tela3').classList.toggle('escondido')
-  document.querySelector('.tela1').classList.toggle('escondido')
+  // document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
+  // document.querySelector('.tela3').classList.toggle('escondido')
+  // document.querySelector('.tela1').classList.toggle('escondido')
   window.location.reload()
 }
 
@@ -551,7 +644,10 @@ function respostaEscolhida(elemento, qtdPerguntas) {
     return
   }
   setTimeout(function () {
-    pergunta[jogadas].scrollIntoView()
+    if (qtdPerguntas > jogadas) {
+      console.log(jogadas)
+      pergunta[jogadas].scrollIntoView()
+    }
   }, 2000)
 
   clicado.classList.add('clicado')
@@ -655,7 +751,7 @@ function reiniciarQuizz() {
   jogadas = 0
   acertos = 0
 
-  renderizarQuizzSelecionado()
+  renderizarQuizzSelecionado(quizzSelecionado[0])
 }
 
 pegarQuizz()
@@ -710,7 +806,13 @@ function mandarQuizzServidor(quizz) {
     }
   })
 
-  quizzMandadoServidor.catch(function () {})
+  quizzMandadoServidor.catch(function () {
+    alert('dados incorretos\ninsira os dados corretos')
+    document.querySelector('.telaQuizzPronto').classList.toogle('escondido')
+    document
+      .querySelector('telaCrieSuasPerguntas')
+      .classList.toggle('escondido')
+  })
 }
 function verificaHexadecimal(hexadecimal) {
   let contador = 0
@@ -732,6 +834,8 @@ function verificaHexadecimal(hexadecimal) {
 }
 function acessarQuizz() {
   document.querySelector('.tela3').classList.toggle('escondido')
+  document.querySelector('.quizztitle').classList.toggle('escondido')
+  document.querySelector('.tela2').classList.toggle('escondido')
   quizzSelecionado.push(seusQuizzes[seusQuizzes.length - 1])
   renderizarQuizzSelecionado(quizzSelecionado)
 }
