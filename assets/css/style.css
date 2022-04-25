@@ -1,12 +1,22 @@
 *{
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
 }
+body, html {
+  overflow-x: hidden !important;
+  }
 body{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+span{
+  font-family: 'Roboto', sans-serif;
+  color: #EC362D;
+  font-weight: 400;
+  font-size: 16px;
+  max-width: 564px;
+  width: 100%;
 }
 .mainContainer{
   max-width: 1051px;
@@ -52,7 +62,7 @@ z-index: 1;
   color: #fff;
   font: 400 39px 'Roboto', sans-serif;
   position: absolute;
- 
+  word-break: break-word;
 }
 
 .telaSobrepor{
@@ -84,7 +94,7 @@ h4{
   margin-bottom: 85px;
 }
 .between{
-  display: flex;
+  display: flex;  
   justify-content: space-between;
   align-items: center;
 }
@@ -198,7 +208,7 @@ justify-content: center;
 .caixaPerguntasComeco{
   max-width: 600px;
   width: 100%;
-  height: 256px;
+  /* height: 256px; */
   margin-top: 27px;
   display: flex;
   flex-direction: column;
@@ -327,9 +337,11 @@ li{
 }
 
 .tela2{
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 .perguntasDoQuizz,.resultadoQuizz {
   margin-top: 42px;
@@ -337,7 +349,8 @@ li{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 759px;
+  max-width: 759px;
+  width: 100%;
   box-sizing: border-box;
   padding: 24px;
   gap: 24px;
@@ -360,6 +373,8 @@ li{
   flex-wrap: wrap;
   gap:15px;
   justify-content: space-between;
+  max-width: 688px;
+  width: 100%;
 }
 .resultado{
   flex-wrap: nowrap;
@@ -386,6 +401,8 @@ li{
 }
 .opcao{
   position: relative;
+  max-width: 331px;
+  width: 100%;
 }
 .voltarHome{
   cursor: pointer;
@@ -399,8 +416,14 @@ li{
   background-color: rgba(255, 255, 255, 0.425);
 }
 .opcao img{
-  width: 329px;
+  max-width: 329px;
+  width: 100%;
   height: 175px;
+}
+
+.opcao > div{
+  max-width: 331px;
+  width: 100%;
 }
 
 .opcao p{
@@ -421,18 +444,22 @@ li{
 .todosQuizz >.topoTodosQuizz{
   align-items: flex-start;
 } */
+.inputErro{
+  background-color: #FFE9E9;
+}
 .escondido{
   display: none;
 }
-@media (max-width:600px){
+@media (max-width:770px){
   .pergunta,.nivel,.caixaPerguntasComeco{
     max-width: 375px;
-    width: 100%;
-    background-color: aqua;
   }
   input{
     max-width: 341px;
     width: 100%;
+  }
+  li{
+    max-width: 375px;
   }
   .botaoProsseguir{
     max-width: 325px;
@@ -441,9 +468,6 @@ li{
   .descricao{
     height: 171px;
   }
-  /* .containerQuizz{
-    flex-direction: column;
-  } */
    .tela1{
     align-items: center;
   } 
@@ -451,5 +475,49 @@ li{
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .perguntasDoQuizz,.resultadoQuizz {
+    margin-top: 24px;
+    
+    max-width: 375px;
+    width: 100%;
+    height: 436px;
+    justify-content: unset;
+    padding: 15px;
+    gap: 12px;
+    
+  }
+  .opcao img{
+    max-width: 162px;
+    height: 113px;
+  }
+  .opcoesDeRespostas,.resultado{
+   gap: 5px;
+    max-width: 338px;
+    width: 100%;
+  }
+  .opcao{
+    max-width: 158px;
+  }
+  .perguntaDoQuizz > p{
+    font-size: 18px;
+  }
+  .opcao p{
+    
+    font: 700 13px 'Roboto', sans-serif;
+    
+    max-width: 164px;
+    width: 100%;
+  }
+  .quizztitle p{
+    font: 400 19px 'Roboto', sans-serif;
+  }
+  .topoSeusQuizz{
+    max-width: 340px;
+    width: 100%;
+  }
+  span{
+    max-width: 341px;
+    width: 100%;
   }
 }

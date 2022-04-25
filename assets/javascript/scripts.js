@@ -1,6 +1,6 @@
 let todosQuizz = []
 let seusQuizzes = []
-let quizzSelecionado = {}
+let quizzSelecionado = []
 let seuQuizz = {}
 let acertos = 0
 let jogadas = 0
@@ -29,7 +29,7 @@ function verificarSeusQuizzes() {
     document.querySelector('.seusQuizz').classList.toggle('escondido')
     document.querySelector('.semQuizz').classList.toggle('escondido')
     return
-  } else if (tamanho === 1) {
+  } else if (tamanho > 0) {
     document.querySelector('.seusQuizz').classList.remove('escondido')
     document.querySelector('.semQuizz').classList.add('escondido')
   }
@@ -40,32 +40,52 @@ function prosseguir(elemento) {
   const botoes = document.querySelectorAll('.botaoProsseguir')
   const inputRespostas = botoes[1].parentNode.querySelectorAll('input')
   const inputNiveis = botoes[2].parentNode.querySelectorAll('input')
+  const span = elemento.parentNode.querySelectorAll('span')
   if (elemento === botoes[0]) {
-    const titulo = elemento.parentNode.querySelectorAll('input')[0].value
-    const url = elemento.parentNode.querySelectorAll('input')[1].value
-    quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2].value
-    quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3].value
-    seuQuizz.title = titulo
-    seuQuizz.image = url
-
-    if (titulo.length < 20 || titulo.length > 65) {
-      alert('preencha os dados corretamente')
+    const titulo = elemento.parentNode.querySelectorAll('input')[0]
+    const url = elemento.parentNode.querySelectorAll('input')[1]
+    quantidadePerguntas = elemento.parentNode.querySelectorAll('input')[2]
+    quantidadeNivel = elemento.parentNode.querySelectorAll('input')[3]
+    seuQuizz.title = titulo.value
+    seuQuizz.image = url.value
+    let erros = 0
+    if (titulo.value.length < 20 || titulo.length > 65) {
+      dadosErrados(titulo, span[0])
+      erros++
+      // alert('preencha os dados corretamente')
+      // return
+    } else {
+      verificaInput(titulo, span[0])
+    }
+    if (quantidadePerguntas.value < 3) {
+      dadosErrados(quantidadePerguntas, span[2])
+      erros++
+      // alert('preencha os dados corretamente')
+      // return
+    } else {
+      verificaInput(quantidadePerguntas, span[2])
+    }
+    if (quantidadeNivel.value < 2) {
+      dadosErrados(quantidadeNivel, span[3])
+      erros++
+      // alert('preencha os dados corretamente')
+      // return
+    } else {
+      verificaInput(quantidadeNivel, span[3])
+    }
+    if (url.value.slice(0, 8) !== 'https://') {
+      dadosErrados(url, span[1])
+      erros++
+      // alert('preencha os dados corretamente')
+      // return
+    } else {
+      verificaInput(url, span[1])
+    }
+    if (erros > 0) {
       return
     }
-    if (quantidadePerguntas < 3) {
-      alert('preencha os dados corretamente')
-      return
-    }
-    if (quantidadeNivel < 2) {
-      alert('preencha os dados corretamente')
-      return
-    }
-    if (url.slice(0, 8) !== 'https://') {
-      alert('preencha os dados corretamente')
-      return
-    }
-    renderizarPerguntas(quantidadePerguntas)
-    renderizarNiveis(quantidadeNivel)
+    renderizarPerguntas(quantidadePerguntas.value)
+    renderizarNiveis(quantidadeNivel.value)
   }
   if (elemento === botoes[1]) {
     if (verificarPerguntas(elemento) === true) {
@@ -73,7 +93,7 @@ function prosseguir(elemento) {
     }
     let perguntas = []
     let respostas = []
-    for (let i = 0; i < quantidadePerguntas; i++) {
+    for (let i = 0; i < quantidadePerguntas.value; i++) {
       let pergunta = {}
       let resposta = {}
       pergunta.title = inputRespostas[0 + 10 * i].value
@@ -92,6 +112,7 @@ function prosseguir(elemento) {
       resposta.image = inputRespostas[7 + 10 * i].value
       resposta.isCorrectAnswer = false
       respostas.push(resposta)
+      resposta = {}
       resposta.text = inputRespostas[8 + 10 * i].value
       resposta.image = inputRespostas[9 + 10 * i].value
       resposta.isCorrectAnswer = false
@@ -102,13 +123,14 @@ function prosseguir(elemento) {
       perguntas.push(pergunta)
     }
     seuQuizz.questions = perguntas
+    console.log(seuQuizz)
   }
   if (elemento === botoes[2]) {
     if (verificarNiveis() === true) {
       return
     }
     let niveis = []
-    for (let i = 0; i < quantidadeNivel; i++) {
+    for (let i = 0; i < quantidadeNivel.value; i++) {
       let nivel = {}
       nivel.title = inputNiveis[0 + i * 4].value
       nivel.minValue = inputNiveis[1 + i * 4].value
@@ -118,14 +140,6 @@ function prosseguir(elemento) {
     }
     seuQuizz.levels = niveis
   }
-  // if (elemento === botoes[botoes.length - 1]) {
-  //   seusQuizzes.push(seuQuizz)
-  //   renderizarSeusQuizzes()
-  //   document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
-  //   document.querySelector('.tela3').classList.toggle('escondido')
-  //   document.querySelector('.tela1').classList.toggle('escondido')
-  //   document.querySelector('.tela1').scrollIntoView(true)
-  // } else {
   for (let i = 0; i < botoes.length - 1; i++) {
     if (elemento === botoes[i]) {
       botoes[i].parentNode.classList.toggle('escondido')
@@ -136,6 +150,7 @@ function prosseguir(elemento) {
   }
 
   if (elemento === botoes[botoes.length - 1]) {
+    console.log(seuQuizz)
     for (let i = 0; i < seuQuizz.questions.length; i++) {
       seuQuizz.questions[i].answers = seuQuizz.questions[i].answers.filter(
         function (elemento) {
@@ -146,36 +161,19 @@ function prosseguir(elemento) {
         }
       )
     }
+    console.log(seuQuizz)
     elemento.parentNode.classList.toggle('escondido')
     document.querySelector('.telaQuizzPronto').classList.toggle('escondido')
     document.querySelector('.telaQuizzPronto').scrollIntoView(false)
-    let localizar = document.querySelector('.quizzNovo')
-    localizar.innerHTML = `
-    <div class="containerImagem">
-      <div class="fundoDegrader"></div>
-      <img
-      src="${seuQuizz.image}"
-      />
-      <p>
-        ${seuQuizz.title}
-      </p>
-    </div>
-  `
+
     mandarQuizzServidor(seuQuizz)
-    // seusQuizzes.push(seuQuizz)
-    // mandarQuizzParaNavegador()
-    // renderizarSeusQuizzes()
-    // verificarSeusQuizzes()
   }
 }
 
 function verificarPerguntas(elemento) {
   let perguntasErradasVazias = 0
   const input = elemento.parentNode.querySelectorAll('input')
-  // let perguntas = []
-  // let tituloPergunta = elemento.parentNode.querySelectorAll('input')[0]
-  // let corDeFundoPergunta = elemento.parentNode.querySelectorAll('input')[1]
-  for (let i = 0; i < quantidadePerguntas; i++) {
+  for (let i = 0; i < quantidadePerguntas.value; i++) {
     for (let j = 0; j < 10; j++) {
       // let pergunta = {}
       if (j === 0) {
@@ -239,14 +237,14 @@ function verificarPerguntas(elemento) {
       }
     }
   }
-  if (perguntasErradasVazias > 2 * quantidadePerguntas) {
+  if (perguntasErradasVazias > 2 * quantidadePerguntas.value) {
     alert('preencha os dados corretamente')
     return true
   }
 }
 function verificarNiveis() {
   const input = document.querySelector('.niveis').querySelectorAll('input')
-  for (let i = 0; i < quantidadeNivel; i++) {
+  for (let i = 0; i < quantidadeNivel.value; i++) {
     for (j = 0; j < 4; j++) {
       if (j === 0) {
         if (input[0 + 4 * i].value.length < 10) {
@@ -275,7 +273,7 @@ function verificarNiveis() {
     }
   }
   let contador = 0
-  for (let i = 0; i < quantidadeNivel; i++) {
+  for (let i = 0; i < quantidadeNivel.value; i++) {
     if (input[1 + 4 * i].value == 0) {
       contador++
     }
@@ -379,17 +377,11 @@ function renderizarSeusQuizzes() {
   localizar.innerHTML = ''
   for (let i = 0; i < seusQuizzes.length; i++) {
     localizar.innerHTML += `
-  <div class="containerImagem" onclick="selecionarQuizz(this)">
-  <div class="fundoDegrader"></div>
-  <img
-    src="${seusQuizzes[i].image}"
-    alt=""
-    onclick="selecionarQuizz(this)"
-  />
-  <p>
-    ${seusQuizzes[i].title}
-  </p>
-</div>
+    <div class="containerImagem" onclick="selecionarQuizz(this)">
+    <div class="fundoDegrader"></div>
+    <img data-id="${seusQuizzes[i].id}" src=${seusQuizzes[i].image} alt=""/>
+    <p>${seusQuizzes[i].title}</p>
+  </div>
   `
   }
   verificarSeusQuizzes()
@@ -411,7 +403,15 @@ function carregarTodosQuizz(response) {
   response.data.map(function (elemento) {
     todosQuizz.push(elemento)
   })
-  renderizarTodosQuizzes(todosQuizz)
+  const QuizzParaSeremRenderizados = todosQuizz.filter(function (quizz) {
+    for (let i = 0; i < seusQuizzes.length; i++) {
+      if (quizz.id === seusQuizzes[i].id) {
+        return false
+      }
+    }
+    return true
+  })
+  renderizarTodosQuizzes(QuizzParaSeremRenderizados)
 }
 function renderizarTodosQuizzes(todosQuizz) {
   const containerQuizz = document.querySelector('.todosQuizz .containerQuizz')
@@ -452,15 +452,29 @@ function selecionarQuizz(elemento) {
   //   console.log(erro.response)
   // })
   const dataId = elemento.querySelector('[data-id]').getAttribute('data-id')
-  const elementoSelecionado = todosQuizz.filter(function (elemento) {
-    if (elemento.id == dataId) {
-      return true
-    }
-    return false
-  })
+  quizzSelecionado.push(
+    todosQuizz.filter(function (elemento) {
+      if (elemento.id == dataId) {
+        return true
+      }
+      return false
+    })
+  )
 
-  renderizarQuizzSelecionado(elementoSelecionado)
+  renderizarQuizzSelecionado(quizzSelecionado[0])
 }
+// function SeuQuizzSelecionado(quizz) {
+//   console.log('oi')
+//   const dataId = quizz.querySelector('[data-id]').getAttribute('data-id')
+//   const quizzSelecionado = seusQuizzes.filter(function (elemento) {
+//     if (elemento.id == dataId) {
+//       return true
+//     }
+//     return false
+//   })
+//   renderizarQuizzSelecionado(quizzSelecionado)
+//   doc
+// }
 
 function renderizarQuizzSelecionado(quizzSelecionado) {
   window.scrollTo(0, 0)
@@ -604,6 +618,9 @@ function pegarQuizzDoNavegador() {
   }
   const dadosDeserializados = JSON.parse(pegarQuizz)
   seusQuizzes = dadosDeserializados
+  seusQuizzes.map(function (quizz) {
+    todosQuizz.push(quizz)
+  })
 }
 function mandarQuizzParaNavegador() {
   const dadosSerializados = JSON.stringify(seusQuizzes)
@@ -612,12 +629,31 @@ function mandarQuizzParaNavegador() {
 function mandarQuizzServidor(quizz) {
   const quizzMandadoServidor = axios.post(API, quizz)
   quizzMandadoServidor.then(function (response) {
-    //armazeno o quizz
-    //coloco o quizz no navegador
-    // visualizacaoDoQuizzFinalizado(quizz)
     seuQuizz.id = response.data.id
     seuQuizz.key = response.data.key
     seusQuizzes.push(quizz)
+    let localizar = document.querySelector('.quizzNovo')
+    let renderizarBotao = document.querySelector('.telaQuizzPronto')
+    localizar.innerHTML = ''
+    localizar.innerHTML += `
+    <div class="containerImagem">
+      <div class="fundoDegrader"></div>
+      <img
+      src="${seuQuizz.image}"
+      />
+      <p>
+        ${seuQuizz.title}
+      </p>
+    </div>
+  `
+    renderizarBotao.innerHTML += `
+    <div class="botaoAcessarQuizz" onclick="acessarQuizz()">
+      Acessar Quizz
+    </div>
+    <div class="botaoVoltarHome" onclick="voltarHome()">
+      Voltar pra home
+    </div>
+    `
     renderizarSeusQuizzes()
     mandarQuizzParaNavegador()
     seuQuizz = {}
@@ -628,7 +664,6 @@ function mandarQuizzServidor(quizz) {
 
   quizzMandadoServidor.catch(function () {})
 }
-// function visualizacaoDoQuizzFinalizado(quizz) {}
 function verificaHexadecimal(hexadecimal) {
   let contador = 0
   const letrasParaVerificar = ['A', 'B', 'C', 'D', 'E', 'F']
@@ -646,4 +681,21 @@ function verificaHexadecimal(hexadecimal) {
     return true
   }
   return false
+}
+function acessarQuizz() {
+  document.querySelector('.tela3').classList.toggle('escondido')
+  quizzSelecionado.push(seusQuizzes[seusQuizzes.length - 1])
+  renderizarQuizzSelecionado(quizzSelecionado)
+}
+function verificaInput(input, span) {
+  if (input.classList.contains('inputErro') === true) {
+    input.classList.remove('inputErro')
+    span.classList.add('escondido')
+  }
+}
+function dadosErrados(input, span) {
+  if (input.classList.contains('inputErro') === false) {
+    input.classList.add('inputErro')
+    span.classList.remove('escondido')
+  }
 }
