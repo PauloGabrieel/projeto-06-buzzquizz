@@ -364,13 +364,19 @@ li{
   justify-content: center;
   align-items: center;
   font: 700 23px 'Roboto', sans-serif;
-  background-color: blue;
+  background-color: #EC362D;
   height: 137px;
   color: #fff;
-  
+  word-break: break-word;
+  height: auto;
+  text-align: center;
+  padding: 30px 0;
 }
 .porcentagemAcerto p{
   text-align: center;
+}
+.perguntaDoQuizz > p{
+  font: 700 23px 'Roboto', sans-serif;
 }
 .opcoesDeRespostas,.resultado{
   display: flex;
@@ -382,23 +388,32 @@ li{
 }
 .resultado{
   flex-wrap: nowrap;
-  
+  word-break: break-word;
 }
 .resultado img{
-  width: 364px;
-
+  max-width: 364px;
+  width: 100%;
+}
+.resultado p{
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  color: #484848;
+  font-size: 17px;
 }
 .reiniciarQuizz{
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 260px;
+  max-width: 260px;
+  width: 100%;
   height: 52px;
   border-radius: 15px;
   background-color: #EC362D;
   color: #fff;
   cursor: pointer;
   transition: all .4s;
+  font-size: 21px;
+  font-family: 'Roboto', sans-serif;
 }
 .reiniciarQuizz:hover{
   transform: translateY(-5px);
@@ -408,9 +423,18 @@ li{
   position: relative;
   max-width: 331px;
   width: 100%;
+  word-break: break-word;
 }
 .voltarHome{
   cursor: pointer;
+  max-width: 219px;
+  width: 100%;
+  height: 44px;
+  font-size: 21px;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+  color: #818181;
+  text-align: center;
 }
 .naoSelecionado{
   position: absolute;
@@ -440,6 +464,7 @@ li{
   display: flex;
   flex-direction: column;
 }
+
 /* .tela1,.todosQuizz{
   display: flex;
   flex-direction: column;
@@ -483,10 +508,9 @@ li{
   }
   .perguntasDoQuizz,.resultadoQuizz {
     margin-top: 24px;
-    
     max-width: 375px;
     width: 100%;
-    height: 436px;
+    height: auto;
     justify-content: unset;
     padding: 15px;
     gap: 12px;
@@ -501,18 +525,39 @@ li{
     max-width: 338px;
     width: 100%;
   }
-  .opcao{
-    max-width: 158px;
+  .perguntaDoQuizz,.porcentagemAcerto{
+    max-width: 340px;
+    padding: 15px 0;
   }
-  .perguntaDoQuizz > p{
+  .resultado{
+    flex-direction: column;
+  }
+  .resultado p{
+    font-size: 17px;
+  }
+  .resultado img{
+    max-width: 340px;
+    height: 255px;
+  }
+  .voltarHome{
     font-size: 18px;
   }
+  .opcao{
+    max-width: 158px;
+    
+  }
+  
   .opcao p{
     
     font: 700 13px 'Roboto', sans-serif;
     
     max-width: 164px;
     width: 100%;
+  }
+  .reiniciarQuizz{
+    max-width: 221px;
+    height: 44px;
+    font-size: 18px;
   }
   .quizztitle p{
     font: 400 19px 'Roboto', sans-serif;
