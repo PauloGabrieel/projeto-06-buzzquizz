@@ -824,12 +824,27 @@ function mandarQuizzServidor(quizz) {
 }
 function verificaHexadecimal(hexadecimal) {
   let contador = 0
-  const letrasParaVerificar = ['A', 'B', 'C', 'D', 'E', 'F']
+  const letrasParaVerificar = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ]
   for (let i = 1; i < hexadecimal.length; i++) {
     for (let j = 0; j < letrasParaVerificar.length; j++) {
-      if (
-        hexadecimal.toUpperCase().slice(i, i + 1) === letrasParaVerificar[j]
-      ) {
+      if (hexadecimal.toUpperCase().slice(i, i + 1) == letrasParaVerificar[j]) {
         contador++
         break
       }

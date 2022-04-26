@@ -523,7 +523,7 @@ li{
 .escondido{
   display: none;
 }
-@media (max-width:770px){
+@media (max-width:1100px){
   .pergunta,.nivel,.caixaPerguntasComeco{
     max-width: 375px;
   }
