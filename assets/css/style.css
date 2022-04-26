@@ -509,6 +509,10 @@ li{
   display: none;
 }
 @media (max-width:770px){
+
+  .fixar-header{
+    max-width: 100vw;
+  }
   .pergunta,.nivel,.caixaPerguntasComeco{
     max-width: 375px;
   }
