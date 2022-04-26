@@ -1,8 +1,8 @@
 *{
   box-sizing: border-box;
 }
-body, html {
-  overflow-x: hidden !important;
+html {
+  
   scroll-behavior: smooth;
   }
 body{
@@ -10,6 +10,7 @@ body{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-x: hidden !important;
 }
 span{
   font-family: 'Roboto', sans-serif;
