@@ -509,7 +509,9 @@ li{
   display: none;
 }
 @media (max-width:770px){
-
+  .mainContainer{
+    max-width: 100vw;
+  }
   .fixar-header{
     max-width: 100vw;
   }
