@@ -487,12 +487,21 @@ function voltarHome() {
 }
 
 function pegarQuizz() {
-  const promise = axios.get(API)
+
+  
+  const promise = axios.get(API) 
+  
+  
   promise.then(carregarTodosQuizz)
   promise.catch(tratarErro)
+
+  
+  
+  
 }
 
 function carregarTodosQuizz(response) {
+  
   response.data.map(function (elemento) {
     todosQuizz.push(elemento)
   })
@@ -504,11 +513,18 @@ function carregarTodosQuizz(response) {
     }
     return true
   })
+  
   renderizarTodosQuizzes(QuizzParaSeremRenderizados)
+    
+  
+  
 }
 function renderizarTodosQuizzes(todosQuizz) {
+  
+  
   const containerQuizz = document.querySelector('.todosQuizz .containerQuizz')
 
+  
   containerQuizz.innerHTML = ''
   for (let i = 0; i < todosQuizz.length; i++) {
     containerQuizz.innerHTML += `
@@ -553,8 +569,10 @@ function selecionarQuizz(elemento) {
       return false
     })
   )
-
+  
   renderizarQuizzSelecionado(quizzSelecionado[0])
+  
+  
 }
 // function SeuQuizzSelecionado(quizz) {
 //   console.log('oi')
@@ -570,6 +588,7 @@ function selecionarQuizz(elemento) {
 // }
 
 function renderizarQuizzSelecionado(quizzSelecionado) {
+  
   window.scrollTo(0, 0)
 
   const quizzTitle = document.querySelector('.quizztitle')
@@ -851,3 +870,4 @@ function dadosErrados(input, span) {
     span.classList.remove('escondido')
   }
 }
+
