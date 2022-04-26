@@ -5,8 +5,8 @@ let seuQuizz = {}
 let acertos = 0
 let jogadas = 0
 let levels = []
-let editar = 0
-let quizzParaEditar
+// let editar = 0
+// let quizzParaEditar
 
 const API = 'https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes'
 pegarQuizzDoNavegador()
@@ -80,9 +80,9 @@ function prosseguir(elemento) {
     }
     renderizarPerguntas(quantidadePerguntas.value)
     renderizarNiveis(quantidadeNivel.value)
-    if (editar === 1) {
-      colocarNosInputs()
-    }
+    // if (editar === 1) {
+    //   colocarNosInputs()
+    // }
   }
   if (elemento === botoes[1]) {
     if (verificarPerguntas(elemento) === true) {
@@ -476,17 +476,13 @@ function renderizarSeusQuizzes() {
   localizar.innerHTML = ''
   for (let i = seusQuizzes.length - 1; i >= 0; i--) {
     localizar.innerHTML += `
-    <div class = "posicionar">
-      <div class = "ajustar">
+    
         <div class="containerImagem" onclick="selecionarQuizz(this)">
           <div class="fundoDegrader"></div>
           <img data-id="${seusQuizzes[i].id}" src=${seusQuizzes[i].image} alt=""/>
           <p>${seusQuizzes[i].title}</p>
         </div>
-      </div>
-      <div onclick = "editarQuizz(this)" class = "botaoImagem botaoCima"><img src = "./assets/images/Group 51.png"/></div>
-      <div class = "botaoImagem botaoBaixo"><img src = "./assets/images/Group.png"/></div>
-    </div>
+    
   `
   }
   verificarSeusQuizzes()
@@ -863,63 +859,63 @@ function dadosErrados(input, span) {
     span.classList.remove('escondido')
   }
 }
-function editarQuizz(elemento) {
-  editar++
-  const id = elemento.parentNode
-    .querySelector('[data-id]')
-    .getAttribute('data-id')
-  quizzParaEditar = seusQuizzes.filter(function (x) {
-    if (x.id == id) {
-      return true
-    }
-    return false
-  })
-  criarQuizz()
-  const inputsComeco = document.querySelectorAll('input')
-  inputsComeco[0].value = quizzParaEditar[0].title
-  inputsComeco[1].value = quizzParaEditar[0].image
-  inputsComeco[2].value = quizzParaEditar[0].questions.length
-  inputsComeco[3].value = quizzParaEditar[0].levels.length
-}
-function colocarNosInputs() {
-  const inputRespostas = document
-    .querySelector('.telaCrieSuasPerguntas')
-    .querySelectorAll('input')
-  const inputNiveis = document
-    .querySelector('.telaDecidaNiveis')
-    .querySelectorAll('input')
-  // for (let i = 0; i < quantidadePerguntas; i++) {
-  //   for (let j = 0; j < 10; j++) {
-  //     if (j === 0) {
-  //       inputRespostas[0 + i * 10].value = quizzParaEditar.questions[i].title
-  //     }
-  //     if (j === 1) {
-  //       inputRespostas[1 + 10 * i].value = quizzParaEditar.questions[i].color
-  //     }
-  //   }
-  // }
-  let respostas = quizzParaEditar[0].questions.map(function (elemento) {
-    return elemento.answers
-  })
-  respostas.forEach(function (x, index) {
-    for (let i = 0; i < x.length; i++) {
-      inputRespostas[2 * i + 10 * index + 2].value = x[i].text
-      inputRespostas[2 * i + 1 + index * 10 + 2].value = x[i].image
-    }
-  })
-  quizzParaEditar[0].questions.forEach(function (e, index) {
-    inputRespostas[index * 10].value = e.title
-    inputRespostas[index * 10 + 1].value = e.color
-  })
-  quizzParaEditar[0].levels.forEach(function (e, index) {
-    inputNiveis[index * 4].value = e.title
-    inputNiveis[index * 4 + 1].value = e.minValue
-    inputNiveis[index * 4 + 2].value = e.image
-    inputNiveis[index * 4 + 3].value = e.text
-  })
-}
-// function deletarQuizzEditado(){
-//   for (let i = 0; i < seusQuizzes.length;i++){
-//     if(quizzParaEditar.id === qui
-//   }
+// function editarQuizz(elemento) {
+//   editar++
+//   const id = elemento.parentNode
+//     .querySelector('[data-id]')
+//     .getAttribute('data-id')
+//   quizzParaEditar = seusQuizzes.filter(function (x) {
+//     if (x.id == id) {
+//       return true
+//     }
+//     return false
+//   })
+//   criarQuizz()
+//   const inputsComeco = document.querySelectorAll('input')
+//   inputsComeco[0].value = quizzParaEditar[0].title
+//   inputsComeco[1].value = quizzParaEditar[0].image
+//   inputsComeco[2].value = quizzParaEditar[0].questions.length
+//   inputsComeco[3].value = quizzParaEditar[0].levels.length
 // }
+// function colocarNosInputs() {
+//   const inputRespostas = document
+//     .querySelector('.telaCrieSuasPerguntas')
+//     .querySelectorAll('input')
+//   const inputNiveis = document
+//     .querySelector('.telaDecidaNiveis')
+//     .querySelectorAll('input')
+//   // for (let i = 0; i < quantidadePerguntas; i++) {
+//   //   for (let j = 0; j < 10; j++) {
+//   //     if (j === 0) {
+//   //       inputRespostas[0 + i * 10].value = quizzParaEditar.questions[i].title
+//   //     }
+//   //     if (j === 1) {
+//   //       inputRespostas[1 + 10 * i].value = quizzParaEditar.questions[i].color
+//   //     }
+//   //   }
+//   // }
+//   let respostas = quizzParaEditar[0].questions.map(function (elemento) {
+//     return elemento.answers
+//   })
+//   respostas.forEach(function (x, index) {
+//     for (let i = 0; i < x.length; i++) {
+//       inputRespostas[2 * i + 10 * index + 2].value = x[i].text
+//       inputRespostas[2 * i + 1 + index * 10 + 2].value = x[i].image
+//     }
+//   })
+//   quizzParaEditar[0].questions.forEach(function (e, index) {
+//     inputRespostas[index * 10].value = e.title
+//     inputRespostas[index * 10 + 1].value = e.color
+//   })
+//   quizzParaEditar[0].levels.forEach(function (e, index) {
+//     inputNiveis[index * 4].value = e.title
+//     inputNiveis[index * 4 + 1].value = e.minValue
+//     inputNiveis[index * 4 + 2].value = e.image
+//     inputNiveis[index * 4 + 3].value = e.text
+//   })
+// }
+// // function deletarQuizzEditado(){
+// //   for (let i = 0; i < seusQuizzes.length;i++){
+// //     if(quizzParaEditar.id === qui
+// //   }
+// // }
