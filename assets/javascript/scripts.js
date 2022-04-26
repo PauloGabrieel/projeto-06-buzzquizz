@@ -334,7 +334,6 @@ function verificarNiveis() {
       }
       if (j === 3) {
         if (input[3 + 4 * i].value.length < 30) {
-          console.log('oi')
           // alert('Preencha os dados corretamente')
           // return true
           erros++
@@ -653,7 +652,6 @@ function respostaEscolhida(elemento, qtdPerguntas) {
   }
   setTimeout(function () {
     if (qtdPerguntas > jogadas) {
-      console.log(jogadas)
       pergunta[jogadas].scrollIntoView()
     }
   }, 2000)
@@ -710,12 +708,8 @@ function fimDeJogo(acertos, qtdPerguntas, levels) {
         resultadoLevel.push(levels[i])
       }
     }
-
-    console.log(levels)
-    console.log(verificarLevel)
   }
   verificar(levels, verificarLevel)
-  console.log(resultadoLevel)
 
   // const resultadoQuizz = document.querySelector(".resultadoQuizz");
 
@@ -741,9 +735,6 @@ function reiniciarQuizz() {
   resultado.classList.add('escondido')
 
   opcoesDeRespostas.forEach(opcao => {
-    console.log(opcao)
-    console.log(opcao.querySelectorAll('.naoSelecionado'))
-
     const naoSelecionado = opcao.querySelectorAll('.naoSelecionado')
     naoSelecionado.forEach(div => {
       div.classList.remove('naoSelecionado')
